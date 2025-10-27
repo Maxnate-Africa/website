@@ -3,13 +3,217 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Maxnate CMS</title>
-  <!-- Optional: You can use your site's CSS if you want same styling -->
-  <link rel="stylesheet" href="../styles.css">
+  <title>Maxnate Africa - Content Manager</title>
+  <style>
+    :root {
+      --primary-red: #dc2626;
+      --dark-red: #991b1b;
+      --light-red: #fca5a5;
+      --pale-red: #fee2e2;
+      --text-dark: #1f2937;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, var(--pale-red) 0%, #ffffff 100%);
+      min-height: 100vh;
+    }
+
+    /* Custom CSS for Decap CMS UI */
+    .nc-app-container {
+      background: transparent !important;
+    }
+
+    /* Header styling */
+    [class*="AppHeader"] {
+      background: linear-gradient(135deg, var(--primary-red) 0%, var(--dark-red) 100%) !important;
+      box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.3) !important;
+    }
+
+    /* Sidebar styling */
+    [class*="SidebarContainer"] {
+      background: linear-gradient(180deg, var(--pale-red) 0%, #ffffff 100%) !important;
+      border-right: 2px solid var(--light-red) !important;
+    }
+
+    /* Buttons */
+    button[class*="Button"],
+    [class*="button-"] {
+      background: var(--primary-red) !important;
+      color: white !important;
+      border: none !important;
+      transition: all 0.3s ease !important;
+    }
+
+    button[class*="Button"]:hover,
+    [class*="button-"]:hover {
+      background: var(--dark-red) !important;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4) !important;
+    }
+
+    /* Links and navigation */
+    a[class*="NavLink"],
+    [class*="ListCard"] {
+      border-left: 3px solid transparent !important;
+      transition: all 0.3s ease !important;
+    }
+
+    a[class*="NavLink"]:hover,
+    [class*="ListCard"]:hover {
+      border-left-color: var(--primary-red) !important;
+      background: var(--pale-red) !important;
+    }
+
+    /* Active states */
+    [class*="active"],
+    [aria-selected="true"] {
+      background: var(--pale-red) !important;
+      border-left-color: var(--primary-red) !important;
+    }
+
+    /* Cards and panels */
+    [class*="Card"],
+    [class*="Panel"] {
+      border: 1px solid var(--light-red) !important;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.1) !important;
+    }
+
+    /* Toggle switches */
+    [class*="Toggle"][class*="checked"] {
+      background: var(--primary-red) !important;
+    }
+
+    /* Focus states */
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--primary-red) !important;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1) !important;
+      outline: none !important;
+    }
+
+    /* Loading spinner */
+    [class*="Loader"] {
+      border-top-color: var(--primary-red) !important;
+    }
+
+    /* Progress bars */
+    [class*="ProgressBar"] {
+      background: var(--light-red) !important;
+    }
+
+    [class*="ProgressBar"] > div {
+      background: var(--primary-red) !important;
+    }
+
+    /* Badges */
+    [class*="Badge"] {
+      background: var(--primary-red) !important;
+      color: white !important;
+    }
+
+    /* Dropdown menus */
+    [class*="Dropdown"] {
+      border: 1px solid var(--light-red) !important;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15) !important;
+    }
+
+    /* Search input */
+    [class*="SearchInput"] input {
+      border: 2px solid var(--light-red) !important;
+    }
+
+    /* Toolbar */
+    [class*="Toolbar"] {
+      background: var(--pale-red) !important;
+      border-bottom: 2px solid var(--light-red) !important;
+    }
+
+    /* Login page styling */
+    [class*="LoginPage"] {
+      background: linear-gradient(135deg, var(--pale-red) 0%, #ffffff 100%) !important;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--pale-red);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary-red);
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--dark-red);
+    }
+
+    /* Loading screen */
+    .loading-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, var(--pale-red) 0%, #ffffff 100%);
+    }
+
+    .loading-spinner {
+      width: 60px;
+      height: 60px;
+      border: 4px solid var(--light-red);
+      border-top-color: var(--primary-red);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+      margin-top: 20px;
+      color: var(--primary-red);
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-  <h1>Maxnate CMS Admin</h1>
-  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+  <div class="loading-container" id="loading">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Loading Maxnate Africa CMS...</div>
+  </div>
+
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  
+  <script>
+    // Hide loading screen once CMS is loaded
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const loading = document.getElementById('loading');
+        if (loading) {
+          loading.style.display = 'none';
+        }
+      }, 1000);
+    });
+
+    // Initialize CMS
+    CMS.init();
+  </script>
 </body>
 </html>
+
 
