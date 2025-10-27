@@ -1,10 +1,10 @@
 backend:
   name: github
-  repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME  # e.g., maxnate-africa/maxnate
-  branch: main  # or 'master' depending on your repo
+  repo: Maxnate-Africa/website
+  branch: main
 
-media_folder: "images/uploads"  # where uploaded images go
-public_folder: "/images/uploads"
+media_folder: "uploads"        # local storage for uploaded images
+public_folder: "/uploads"      # path accessible from your site
 
 collections:
   - name: "pages"
@@ -13,5 +13,5 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Body", name: "body", widget: "markdown" }
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Body", name: "body", widget: "markdown"}
