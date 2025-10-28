@@ -1,1 +1,55 @@
+name: Responsive Image Optimization
+
+on:
+  push:
+    paths:
+      - 'images/**'   # Run only when images change
+  workflow_dispatch:
+
+jobs:
+  optimize-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install sharp CLI
+        run: npm install -g sharp-cli
+
+      - name: Optimize and resize images
+        run: |
+          mkdir -p images/optimized
+          # Sizes: mobile 480px, tablet 768px, desktop 1920px
+          for img in $(find images -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \)); do
+            filename=$(basename "$img")
+            name="${filename%.*}"
+
+            echo "Processing $filename"
+
+            # Desktop
+            sharp "$img" -resize 1920 0 -webp 80 "images/optimized/${name}-1920.webp"
+            sharp "$img" -resize 1920 0 -avif 50 "images/optimized/${name}-1920.avif"
+
+            # Tablet
+            sharp "$img" -resize 768 0 -webp 80 "images/optimized/${name}-768.webp"
+            sharp "$img" -resize 768 0 -avif 50 "images/optimized/${name}-768.avif"
+
+            # Mobile
+            sharp "$img" -resize 480 0 -webp 80 "images/optimized/${name}-480.webp"
+            sharp "$img" -resize 480 0 -avif 50 "images/optimized/${name}-480.avif"
+          done
+
+      - name: Commit optimized images
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git add images/optimized
+          git commit -m "Add responsive optimized WebP/AVIF images" || echo "No changes to commit"
+          git push
 
