@@ -161,7 +161,7 @@ ul.main-nav li a.active {
 
 /* --- 3. Panel 1: Intro (Hero) Section --- */
 #intro {
-    background: url('images/main background/background.svg') no-repeat center center/cover;
+    background: url('images/main background/background.webp') no-repeat center center/cover;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -555,3 +555,4 @@ ul.main-nav li a.active {
         padding: 1.5em;
     }
 }
+
