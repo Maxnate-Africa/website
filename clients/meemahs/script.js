@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const elementTop = targetElement.offsetTop;
                 
                 container.scrollTo({
-                    top: elementTop - containerTop, // Scroll to element relative to container
+                    top: elementTop - containerTop,
                     behavior: 'smooth'
                 });
             }
@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // 1c. Update Active Link
         navLinks.forEach(nav => nav.classList.remove('active'));
-        // Find all links pointing to this ID (for 'Book Now' button)
         document.querySelectorAll(`.nav-link[href="${targetId}"]`).forEach(l => l.classList.add('active'));
 
         // 1d. Close mobile menu on click
@@ -58,34 +57,38 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // --- 2. Mobile Menu Toggle ---
-    mobileToggle.addEventListener('click', function(e) {
-        e.preventDefault();
-        sidebar.classList.toggle('visible');
-    });
+    if (mobileToggle) {
+        mobileToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            sidebar.classList.toggle('visible');
+        });
+    }
 
-    // Close mobile menu if clicking outside of it
-    main.addEventListener('click', function() {
-        if (sidebar.classList.contains('visible')) {
+    // --- Fixed Close Behavior ---
+    document.addEventListener('click', function (e) {
+        if (
+            sidebar.classList.contains('visible') &&
+            !sidebar.contains(e.target) &&
+            !mobileToggle.contains(e.target)
+        ) {
             sidebar.classList.remove('visible');
         }
     });
 
-    // --- 3. Scroll Fade-In Animations (Intersection Observer) ---
+    // --- 3. Scroll Fade-In Animations ---
     const fadeElements = document.querySelectorAll('.fade-in');
     
     if ("IntersectionObserver" in window) {
         const observerOptions = {
-            root: panels.content, // Observe scrolling within the #content-wrapper
+            root: panels.content,
             rootMargin: '0px',
-            threshold: 0.15 // 15% of the item must be visible
+            threshold: 0.15
         };
 
         const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    // Optional: stop observing once it's visible
-                    // observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
@@ -94,7 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
             observer.observe(el);
         });
     } else {
-        // Fallback for older browsers
         fadeElements.forEach(el => el.classList.add('visible'));
     }
 
@@ -118,10 +120,10 @@ document.addEventListener('DOMContentLoaded', function() {
         lightbox.style.display = 'none';
     }
 
-    // Close on 'x' button
-    closeBtn.addEventListener('click', closeLightbox);
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closeLightbox);
+    }
     
-    // Close on clicking outside the image
     lightbox.addEventListener('click', function(e) {
         if (e.target === lightbox) {
             closeLightbox();
@@ -129,3 +131,4 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
+/* --- End of script.js --- */
