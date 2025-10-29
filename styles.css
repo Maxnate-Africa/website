@@ -730,7 +730,7 @@ body {
    FOOTER
    =========================== */
 .footer {
-    background: linear-gradient(135deg, #f80404 0%, #6d1515 50%, #c10808 100%);
+    background: Var(--gradient-red);
     color: #ffffff;
     padding: 4rem 0 0;
     position: relative;
