@@ -8,14 +8,12 @@
 }
 
 :root {
-    /* Brand Colors */
-    --primary-red: #FF0000;
-    --secondary-red: #8B0000;
-    --dark-gray: #A9A9A9;
-    --pure-black: #000000;
-    --white: #ffffff;
-    --gradient-red: linear-gradient(135deg, #FF0000, #8B0000);
-    --gradient-white: linear-gradient(180deg, var(--white), var(--dark-gray));
+    /* Brand Colors: Teal, Charcoal, Off-White */
+    --primary-teal: #008080;
+    --dark-charcoal: #1c1c1d;
+    --off-white: #f7f8f9;
+    --gradient-teal: linear-gradient(135deg, #008080, #1c1c1d);
+    --gradient-offwhite: linear-gradient(180deg, #f7f8f9, #008080);
     
     /* Typography */
     --font-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -29,7 +27,7 @@
 body {
     font-family: var(--font-primary);
     line-height: 1.6;
-    color: var(--pure-black);
+    color: var(--dark-charcoal);
     overflow-x: hidden;
 }
 
@@ -43,7 +41,7 @@ body {
    NAVIGATION
    =========================== */
 .navbar {
-    background: var(--white);
+    background: var(--off-white);
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     position: sticky;
     top: 0;
@@ -61,7 +59,7 @@ body {
 .logo a {
     font-size: 1.8rem;
     font-weight: bold;
-    color: var(--primary-red);
+    color: var(--primary-teal);
     text-decoration: none;
     letter-spacing: 2px;
 }
@@ -74,7 +72,7 @@ body {
 }
 
 .nav-menu a {
-    color: var(--black);
+    color: var(--dark-charcoal);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.3s ease;
@@ -82,7 +80,7 @@ body {
 }
 
 .nav-menu a:hover {
-    color: var(--primary-red);
+    color: var(--primary-teal);
 }
 
 /* Dropdown Menu */
@@ -98,7 +96,7 @@ body {
     position: absolute;
     top: 100%;
     left: 0;
-    background: var(--pure-black);
+    background: var(--dark-charcoal);
     box-shadow: 0 4px 20px rgba(0,0,0,0.0);
     list-style: none;
     min-width: 250px;
@@ -117,23 +115,29 @@ body {
 }
 
 .dropdown-menu li {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--off-white);
 }
 
 .dropdown-menu li:last-child {
     border-bottom: none;
+         background: var(--gradient-teal);
+         color: var(--off-white);
+    }
+
+    .footer p {
+         color: #fff;
 }
 
 .dropdown-menu a {
     display: block;
     padding: 1rem 1.5rem;
-    color: var(--primary-red);
+    color: var(--primary-teal);
     transition: all 0.3s ease;
 }
 
 .dropdown-menu a:hover {
-    background: var(--dark-gray);
-    color: var(--primary-red);
+    background: var(--off-white);
+    color: var(--primary-teal);
     padding-left: 2rem;
 }
 
@@ -150,7 +154,7 @@ body {
 .mobile-toggle span {
     width: 25px;
     height: 3px;
-    background: var(--primary-red);
+    background: var(--primary-teal);
     transition: all 0.3s ease;
 }
 
@@ -182,7 +186,7 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(255, 0, 0, 0.35); /* semi-transparent red overlay */
+    background: rgba(7, 67, 62, 0.35); /* semi-transparent red overlay */
     z-index: 1;
 }
 
@@ -249,25 +253,25 @@ body {
 }
 
 .btn-primary {
-    background: var(--pure-black);
-    color: var(--primary-red);
+    background: var(--dark-charcoal);
+    color: var(--primary-teal);
 }
 
 .btn-primary:hover {
-    background: var(--white);
+    background: var(--off-white);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px var(--pure-black);
+    box-shadow: 0 5px 15px var(--dark-charcoal);
 }
 
 .btn-secondary {
-    background: var(--pure-black);
-    color: var(--primary-red);
+    background: var(--dark-charcoal);
+    color: var(--primary-teal);
 }
 
 .btn-secondary:hover {
-    background: var(--white);
+    background: var(--off-white);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px var(--pure-black);
+    box-shadow: 0 5px 15px var(--dark-charcoal);
 }
 
 /* ===========================
@@ -276,7 +280,7 @@ body {
 .section-title {
     text-align: center;
     font-size: 2.5rem;
-    color: var(--primary-red);
+    color: var(--primary-teal);
     margin-bottom: 3rem;
     position: relative;
 }
@@ -286,14 +290,14 @@ body {
     display: block;
     width: 80px;
     height: 4px;
-    background: var(--accent-red);
+    background: var(--primary-teal);
     margin: 1rem auto;
     border-radius: 2px;
 }
 
 .subsection-title {
     font-size: 2rem;
-    color: var(--primary-blue);
+    color: var(--primary-teal);
     margin: 3rem 0 2rem;
     text-align: center;
 }
@@ -303,7 +307,7 @@ body {
    =========================== */
 .vmv-section {
     padding: var(--section-padding);
-    background: var(--white);
+    background: var(--off-white);
 }
 
 .vmv-grid {
@@ -313,10 +317,10 @@ body {
 }
 
 .vmv-card {
-    background: linear-gradient(135deg, var(--primary-red), var(--secondary-red));
+    background: var(--gradient-teal);
     padding: 2.5rem;
     border-radius: 12px;
-    box-shadow: 0 5px 20px var(--black);
+    box-shadow: 0 5px 20px var(--dark-charcoal);
     text-align: center;
     transition: transform 0.3s ease;
 }
@@ -332,14 +336,14 @@ body {
 
 .vmv-card h3 {
     font-size: 1.8rem;
-    color: var(--pure-black);
+    color: var(--dark-charcoal);
     margin-bottom: 1rem;
 }
 
 .vmv-card p {
     font-size: 1rem;
     line-height: 1.8;
-    color: var(--white);
+    color: var(--off-white);
 }
 
 .values-list {
@@ -354,7 +358,7 @@ body {
     align-items: center;
     gap: 1rem;
     padding: 0.8rem;
-    background: linear-gradient(180deg, var(--white), var(--dark-gray));
+    background: var(--gradient-offwhite);
     border-radius: 8px;
 }
 
@@ -367,7 +371,7 @@ body {
    =========================== */
 .about-section {
     padding: var(--section-padding);
-    background: var(--white);
+    background: var(--off-white);
 }
 
 .about-content {
@@ -380,14 +384,14 @@ body {
 
 .about-text h3 {
     font-size: 2rem;
-    color: var(--pure-black);
+    color: var(--dark-charcoal);
     margin-bottom: 1.5rem;
 }
 
 .about-text p {
     margin-bottom: 1.5rem;
     line-height: 1.8;
-    color: var(--pure-black);
+    color: var(--dark-charcoal);
 }
 
 .about-image img {
@@ -425,10 +429,10 @@ body {
 }
 
 .team-card {
-    background: var(--white);
+    background: var(--off-white);
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 5px 20px var(--pure-black);
+    box-shadow: 0 5px 20px var(--dark-charcoal);
     transition: transform 0.3s ease;
     text-align: center;
     padding-bottom: 1.5rem;
@@ -445,19 +449,19 @@ body {
 
 .team-card h4 {
     font-size: 1.5rem;
-    color: var(--primary-red);
+    color: var(--primary-teal);
     margin-bottom: 0.5rem;
 }
 
 .team-role {
-    color: var(--pure-black);
+    color: var(--dark-charcoal);
     font-weight: 600;
     margin-bottom: 1rem;
 }
 
 .team-bio {
     padding: 0 1.5rem;
-    color: var(--primary-red);
+    color: var(--primary-teal);
     font-size: 0.95rem;
 }
 
@@ -476,8 +480,8 @@ body {
 .impact-card {
     text-align: center;
     padding: 2rem;
-    background: var(--gradient-red);
-    color: var(--white);
+    background: var(--gradient-teal);
+    color: var(--off-white);
     border-radius: 12px;
     transition: transform 0.3s ease;
 }
@@ -502,7 +506,7 @@ body {
    =========================== */
 .testimonials-section {
     padding: var(--section-padding);
-    background: var(--white);
+    background: var(--off-white);
 }
 
 .testimonial-carousel {
@@ -538,7 +542,7 @@ body {
 
 .quote-icon {
     font-size: 4rem;
-    color: var(--pure-black);
+    color: var(--dark-charcoal);
     opacity: 0.3;
     position: absolute;
     top: 1rem;
@@ -548,7 +552,7 @@ body {
 .testimonial-text {
     font-size: 1.2rem;
     line-height: 1.8;
-    color: #555;
+    color: var(--off-white);
     margin: 2rem 0;
     font-style: italic;
 }
@@ -575,13 +579,13 @@ body {
    AUTHOR INFO
    =========================== */
 .author-info h4 {
-    color: var(--pure-black);
+    color: var(--dark-charcoal);
     font-size: 1.1rem;
     margin-bottom: 0.3rem;
 }
 
 .author-info p {
-    color: var(--primary-red);
+    color: var(--primary-teal);
     font-size: 0.95rem;
 }
 
@@ -592,8 +596,8 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: var(--primary-red);
-    color: var(--white);
+    background: var(--primary-teal);
+    color: var(--off-white);
     border: none;
     width: 50px;
     height: 50px;
@@ -605,7 +609,7 @@ body {
 }
 
 .carousel-control:hover {
-    background: var(--pure-black);
+    background: var(--dark-charcoal);
     transform: translateY(-50%) scale(1.1);
 }
 
@@ -628,13 +632,13 @@ body {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: var(--primary-red);
+    background: var(--primary-teal);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .indicator.active {
-    background: var(--pure-black);
+    background: var(--dark-charcoal);
     width: 30px;
     border-radius: 6px;
 }
@@ -645,7 +649,7 @@ body {
    =========================== */
 .contact-section {
     padding: var(--section-padding);
-    background: var(--white);
+    background: var(--off-white);
 }
 
 .contact-grid {
@@ -658,7 +662,7 @@ body {
 .contact-form-container h3,
 .contact-info h3 {
     font-size: 1.8rem;
-    color: var(--primary-red);
+    color: var(--primary-teal);
     margin-bottom: 2rem;
 }
 
@@ -676,13 +680,13 @@ body {
 .form-group label {
     margin-bottom: 0.5rem;
     font-weight: 600;
-    color: var(--dark-gray);
+    color: var(--dark-charcoal);
 }
 
 .form-group input,
 .form-group textarea {
     padding: 1rem;
-    border: 2px solid #e0e0e0;
+    border: 2px solid var(--dark-charcoal);
     border-radius: 8px;
     font-size: 1rem;
     font-family: inherit;
@@ -692,7 +696,7 @@ body {
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: var(--primary-blue);
+    border-color: var(--primary-teal);
 }
 
 .form-group textarea {
@@ -708,30 +712,30 @@ body {
 
 .info-icon {
     font-size: 2rem;
-    color: var(--primary-red);
+    color: var(--primary-teal);
 }
 
 .info-content h4 {
-    color: var(--primary-red);
+    color: var(--primary-teal);
     margin-bottom: 0.5rem;
 }
 
 .info-content p,
 .info-content a {
-    color: var(--pure-black);
+    color: var(--dark-charcoal);
     text-decoration: none;
 }
 
 .info-content a:hover {
-    color: var(--primary-red);
+    color: var(--primary-teal);
 }
 
 /* ===========================
    FOOTER
    =========================== */
 .footer {
-    background: Var(--gradient-red);
-    color: #ffffff;
+    background: var(--gradient-teal);
+    color: var(--off-white);
     padding: 4rem 0 0;
     position: relative;
     overflow: hidden;
@@ -744,7 +748,7 @@ body {
     left: 0;
     right: 0;
     height: 1px;
-    background: background: var(--gradient-red);
+    background: var(--gradient-teal);
 }
 
 .footer-grid {
@@ -775,14 +779,14 @@ body {
 .footer-tagline {
     font-size: 1rem;
     font-weight: 600;
-    color: var(--white);
+    color: var(--off-white);
     margin-bottom: 0.8rem;
 }
 
 /* Description */
 .footer-description {
     font-size: 0.9rem;
-    color: var(--white);
+    color: var(--off-white);
     line-height: 1.7;
     opacity: 0.9;
 }
@@ -792,7 +796,7 @@ body {
     margin-bottom: 1.5rem;
     font-size: 1.1rem;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--off-white);
     position: relative;
     padding-bottom: 0.5rem;
 }
@@ -804,7 +808,7 @@ body {
     bottom: 0;
     width: 40px;
     height: 2px;
-    background: var(--pure-black);
+    background: var(--dark-charcoal);
     border-radius: 2px;
 }
 
@@ -821,7 +825,7 @@ body {
 }
 
 .footer-col a {
-    color: #b0b0b0;
+    color: var(--off-white);
     text-decoration: none;
     font-size: 0.95rem;
     transition: all 0.3s ease;
@@ -836,12 +840,12 @@ body {
     bottom: -2px;
     width: 0;
     height: 1px;
-    background: var(--white);
+    background: var(--off-white);
     transition: width 0.3s ease;
 }
 
 .footer-col a:hover {
-    color: #ffffff;
+    color: var(--off-white);
     transform: translateX(5px);
 }
 
@@ -855,14 +859,14 @@ body {
 }
 
 .footer-contact p {
-    color: #b0b0b0;
+    color: var(--off-white);
     font-size: 0.9rem;
     margin-bottom: 0.6rem;
     line-height: 1.6;
 }
 
 .footer-contact strong {
-    color: #ffffff;
+    color: var(--off-white);
     font-weight: 600;
     margin-right: 0.5rem;
 }
@@ -880,10 +884,10 @@ body {
     justify-content: center;
     width: 42px;
     height: 42px;
-    background: rgb(0, 0, 0);
+    background: var(--dark-charcoal);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    color: #b0b0b0;
+    color: var(--off-white);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -893,7 +897,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--pure-black);
+    background: var(--dark-charcoal);
     opacity: 0;
     transition: opacity 0.4s ease;
     border-radius: 50%;
@@ -908,7 +912,7 @@ body {
 .social-links a:hover {
     transform: translateY(-5px) scale(1.05);
     border-color: transparent;
-    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 8px 20px rgba(46, 241, 232, 0.3);
 }
 
 .social-links a:hover::before {
@@ -916,15 +920,15 @@ body {
 }
 
 .social-links a:hover svg {
-    color: #ffffff;
+    color: var(--off-white);
     transform: scale(1.1);
 }
 
 /* Footer Bottom */
 .footer-bottom {
     padding: 2rem 1rem;
-    border-top: 4px solid var(--pure-black);
-    background: var(--white);
+    border-top: 4px solid var(--dark-charcoal);
+    background: var(--off-white-white);
 }
 
 .footer-bottom-content {
@@ -936,7 +940,7 @@ body {
 }
 
 .footer-bottom p {
-    color: var(--primary-red);
+    color: var(--primary-teal);
     font-size: 0.9rem;
     margin: 0;
 }
@@ -950,18 +954,18 @@ HIKI KIPANDE NITAAMUA KUKITUMIA MBELENI
 }
 
 .footer-legal a {
-    color: var(--primary-red);
+    color: var(--primary-teal);
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.3s ease;
 }
 
 .footer-legal a:hover {
-    color: var(--pure-black);
+    color: var(--dark-charcoal);
 }
 
 .footer-legal span {
-    color: var(--primary-red);
+    color: var(--primary-teal);
     font-size: 0.8rem;
 }
 */
@@ -1101,7 +1105,7 @@ HIKI KIPANDE NITAAMUA KUKITUMIA MBELENI
         top: 100%;
         left: 0;
         right: 0;
-        background: var(--white);
+        background: var(--off-white-white);
         flex-direction: column;
         padding: 2rem;
         box-shadow: 0 5px 20px rgba(0,0,0,0.1);

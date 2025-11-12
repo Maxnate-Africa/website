@@ -175,9 +175,9 @@ window.addEventListener('scroll', function() {
     
     // Add shadow when scrolled
     if (currentScroll > 50) {
-        navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+        navbar.style.boxShadow = '0 4px 20px rgba(0,128,128,0.15)'; // teal shadow
     } else {
-        navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+        navbar.style.boxShadow = '0 2px 10px rgba(28,28,29,0.10)'; // charcoal shadow
     }
     
     lastScroll = currentScroll;
