@@ -2,10 +2,10 @@
 // Fill these values from your Appwrite console.
 // Do NOT put API keys here. This is safe to expose for anonymous reads when your rules allow.
 window.APPWRITE_PUBLIC = {
-  endpoint: "", // e.g. "https://cloud.appwrite.io/v1" or your self-host URL
-  projectId: "", // e.g. "maxnate"
-  databaseId: "", // e.g. "website_db"
-  offersCollectionId: "", // e.g. "offers"
-  newsCollectionId: "", // e.g. "news"
-  projectsCollectionId: "" // e.g. "projects"
+  endpoint: "https://cloud.appwrite.io/v1",
+  projectId: "691de2b2000699d6898f",
+  databaseId: "website_db",
+  offersCollectionId: "offers",
+  newsCollectionId: "news",
+  projectsCollectionId: "projects"
 };
