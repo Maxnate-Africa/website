@@ -408,25 +408,51 @@ For internal team members:
 
 ---
  
-## ☁️ Appwrite Hosting (Recommended)
+## 🚀 Deployment
 
-For Appwrite Hosting, build two deployable folders and deploy them as separate Hosting instances in your Appwrite project.
+This project uses a split deployment strategy:
+- **Public Website** → GitHub Pages
+- **Admin CMS** → Vercel
 
-1. Prepare `dist` folders
+### GitHub Pages (Website)
+
+Automatic deployment on push to `main`:
+
+1. Enable GitHub Pages in repository settings:
+   - Go to **Settings** → **Pages**
+   - Source: **GitHub Actions**
+
+2. Push to `main` branch - workflow deploys automatically
+
+**Manual deploy:**
 
 ```powershell
 ./scripts/prepare-dist.ps1 -Clean
+# Commit and push dist/website folder
 ```
 
-1. Deploy using Appwrite CLI
+### Vercel (Admin CMS)
+
+1. Install Vercel CLI:
 
 ```powershell
-appwrite login
-appwrite client --endpoint https://cloud.appwrite.io/v1
-appwrite client --project-id <PROJECT_ID>
-appwrite push sites
+npm install -g vercel
 ```
 
-See `deploy/appwrite/README.md` for details.
+2. Deploy:
+
+```powershell
+./scripts/prepare-dist.ps1 -Clean
+cd dist/admin
+vercel --prod
+```
+
+3. Add Vercel URL to Appwrite CORS settings
+
+See `deploy/vercel/README.md` for detailed instructions.
+
+### Alternative: Appwrite Hosting
+
+If Appwrite Hosting becomes available, see `deploy/appwrite/README.md`.
 
 **Built with ❤️ by Maxnate Africa** | Innovating for a Smarter Future 🚀
