@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pwsh -c './scripts/prepare-dist.ps1 -Clean'",
+  "buildCommand": "node scripts/build-admin.js",
   "outputDirectory": "dist/admin",
   "installCommand": "echo 'No build dependencies'",
   "framework": null,
