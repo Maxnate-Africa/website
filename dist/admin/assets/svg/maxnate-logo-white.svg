@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 173.15">
+  <defs>
+    <style>
+      .b {
+        fill: teal;
+      }
+
+      .b, .c, .d {
+        isolation: isolate;
+      }
+
+      .b, .d {
+        font-family: Lato-Bold, Lato;
+        font-size: 196.76px;
+        font-weight: 700;
+      }
+
+      .d {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g>
+    <g class="c">
+      <text class="b" transform="translate(-7 -39.56)"><tspan x="0" y="0">M</tspan></text>
+    </g>
+    <g class="c">
+      <text class="b" transform="translate(176.38 -39.56)"><tspan x="0" y="0">a</tspan></text>
+      <text class="b" transform="translate(276.23 -39.56)"><tspan x="0" y="0">x</tspan></text>
+      <text class="b" transform="translate(375.99 -39.56)"><tspan x="0" y="0">CMS</tspan></text>
+    </g>
+  </g>
+  <g class="c">
+    <text class="d" transform="translate(-7 155.72)"><tspan x="0" y="0">M</tspan></text>
+    <text class="d" transform="translate(176.38 155.72)"><tspan x="0" y="0">a</tspan></text>
+    <text class="d" transform="translate(276.23 155.72)"><tspan x="0" y="0">x</tspan></text>
+    <text class="d" transform="translate(375.99 155.72)"><tspan x="0" y="0">CMS</tspan></text>
+  </g>
+</svg>

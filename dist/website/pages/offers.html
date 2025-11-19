@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Current Offers | Maxnate Africa</title>
+  <link rel="stylesheet" href="../assets/css/main.css" />
+  <meta name="description" content="Latest technology service offers from Maxnate Africa." />
+</head>
+<body>
+  <header class="page-header" style="padding:2rem 0 0; text-align:center;">
+    <h1 class="section-title">Latest Offers</h1>
+    <p class="section-subtitle">Claim exclusive, time‑limited technology service discounts.</p>
+  </header>
+
+  <main class="offers-page container">
+    <div id="offersContainer" class="offers-grid" aria-live="polite"></div>
+    <div id="offersEmpty" class="empty-offers" style="display:none;">No active offers right now. Check back soon.</div>
+  </main>
+
+  <!-- Active Offer Overlay injected dynamically -->
+  <div id="offerOverlayMount"></div>
+
+  <!-- Appwrite SDK (CDN) and public config/helper -->
+  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0/dist/appwrite.min.js"></script>
+  <script src="../assets/js/appwrite-config.js"></script>
+  <script src="../assets/js/appwrite-public.js"></script>
+
+  <script>
+    const WHATSAPP_NUMBER = '255746662612';
+
+    function generateOfferCode(id){
+      const date = new Date();
+      const base = `${date.getFullYear()}${String(date.getMonth()+1).padStart(2,'0')}${String(date.getDate()).padStart(2,'0')}`;
+      const short = id.slice(-5).toUpperCase();
+      return `OFF-${base}-${short}`;
+    }
+
+    function buildWhatsAppLink(offer){
+      const code = generateOfferCode(offer.id);
+      const msg = `Hello Maxnate Team,%0A%0AI would like to claim offer ${code}.%0AOffer: ${offer.title}%0ADiscount: ${offer.discount || offer.value || ''}%0AService Category: ${offer.category || ''}%0AStatus: Requesting validation.%0A%0AThank you.`;
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
+    }
+
+    function renderOfferCard(offer){
+      const code = generateOfferCode(offer.id);
+      const expiryTxt = offer.expiry ? new Date(offer.expiry).toLocaleDateString() : 'N/A';
+      return `<div class="offer-card" data-offer-id="${offer.id}">
+        <span class="offer-badge">${offer.discount? 'SAVE' : 'OFFER'}</span>
+        <div class="offer-discount">${offer.discount || offer.value || ''}</div>
+        <h3 class="offer-title">${offer.title}</h3>
+        <p class="offer-desc">${offer.description || ''}</p>
+        <div class="offer-meta">
+          <span class="offer-code">${code}</span>
+          <span class="offer-expiry">Expires: ${expiryTxt}</span>
+        </div>
+        <div class="offer-actions">
+          <a class="offer-claim-btn" href="${buildWhatsAppLink(offer)}" target="_blank" rel="noopener" aria-label="Claim ${code} on WhatsApp">
+            <span>Claim via WhatsApp</span>
+          </a>
+        </div>
+      </div>`;
+    }
+
+    function injectOverlay(offer){
+      const mount = document.getElementById('offerOverlayMount');
+      if (!mount) return;
+      const code = generateOfferCode(offer.id);
+      const expiryTxt = offer.expiry ? new Date(offer.expiry).toLocaleDateString() : '';
+      mount.innerHTML = `<div class="active-offer-overlay" role="dialog" aria-label="Active Offer" aria-live="assertive">
+        <div class="active-offer-header">
+          <h4>🔥 Limited Offer <button class="active-offer-close" aria-label="Close offer" onclick="document.querySelector('.active-offer-overlay').remove()">&times;</button></h4>
+        </div>
+        <div class="active-offer-body">
+          <p><strong>${offer.title}</strong></p>
+          <p>${offer.description || ''}</p>
+          <div class="active-offer-actions">
+            <a class="active-offer-claim" href="${buildWhatsAppLink(offer)}" target="_blank" rel="noopener">Claim <span class="active-offer-code">${code}</span></a>
+            <span class="active-offer-expiry">${expiryTxt ? 'Expires '+expiryTxt : ''}</span>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    async function loadOffers(){
+      const useAppwrite = window.AppwriteFetch && window.AppwriteFetch.init();
+      const container = document.getElementById('offersContainer');
+      const empty = document.getElementById('offersEmpty');
+      if (useAppwrite) {
+        const list = await window.AppwriteFetch.getOffers(12);
+        const active = list.filter(o=> (o.status||'draft')==='published');
+        if (!active.length){ empty.style.display='block'; return; }
+        container.innerHTML = active.map(renderOfferCard).join('');
+        const now = Date.now();
+        const first = active.find(o=> !o.expiry || new Date(o.expiry).getTime() > now);
+        if (first) injectOverlay(first);
+        return;
+      }
+      empty.style.display='block';
+    }
+
+    document.addEventListener('DOMContentLoaded', loadOffers);
+  </script>
+</body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaxCMS</title>
+    <link rel="stylesheet" href="css/admin.css">
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#008080">
+    <link rel="apple-touch-icon" href="favicon.ico">
+</head>
+<body>
+    
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen active">
+        <div class="login-container">
+            <div class="login-header">
+                <img class="brand-logo" src="assets/svg/maxnate-logo-teal.svg" alt="MAXNATE Logo" onerror="this.style.display='none'">
+            </div>
+            <form id="login-form" class="login-form">
+                <div class="form-group">
+                    <label for="username">Email</label>
+                    <input type="email" id="username" name="username" required placeholder="admin@maxnate.com">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="password" name="password" required placeholder="Enter password" autocomplete="current-password">
+                        <button type="button" id="toggle-password" class="toggle-password" aria-label="Show password" aria-pressed="false" title="Show password">
+                            <!-- Eye (show) -->
+                            <svg class="icon-eye" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            <!-- Eye off (hide) -->
+                            <svg class="icon-eye-off" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.77 21.77 0 0 1 5.06-6.94"></path>
+                                <path d="M1 1l22 22"></path>
+                                <path d="M10.58 10.58a2 2 0 1 0 2.83 2.83"></path>
+                                <path d="M9.88 5.46A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.77 21.77 0 0 1-3.84 5.16"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Login to Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Unauthorized Screen -->
+    <div id="unauthorized-screen" class="unauthorized-screen" style="display:none;">
+        <div class="unauth-container">
+            <div class="unauth-icon">🔒</div>
+            <h2>Access Denied</h2>
+            <p>You are not authorized to access this dashboard. Please contact an administrator to be added to the admin team.</p>
+            <button id="unauth-signout" class="btn-primary" style="max-width:260px; margin: 1rem auto 0;">Sign out</button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="admin-dashboard">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img class="brand-logo" src="assets/svg/maxnate-logo-white.svg" alt="MAXNATE Logo" onerror="this.style.display='none'">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-section="projects">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Projects</span>
+                </a>
+                
+                <a href="#" class="nav-item" data-section="news">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                    </svg>
+                    <span>News & Events</span>
+                </a>
+                
+                <div class="nav-divider"></div>
+                
+                <a href="#" class="nav-item" data-section="settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6m-8-8h6m6 0h6"></path>
+                    </svg>
+                    <span>Settings</span>
+                </a>
+                
+                <a href="#" id="logout-btn" class="nav-item logout-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Logout</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="https://www.maxnate.com" target="_blank" rel="noopener noreferrer" class="powered-by">
+                    Powered by Maxnate
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1 id="section-title">Manage Projects</h1>
+            </header>
+
+            <!-- Projects Section -->
+            <section id="projects-section" class="content-section active">
+                <div id="projects-list" class="content-grid"></div>
+            </section>
+
+            <!-- News & Events Section -->
+            <section id="news-section" class="content-section">
+                <div id="news-list" class="content-grid"></div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings-section" class="content-section">
+                <div class="settings-container">
+                    <h2>CMS Settings</h2>
+                    <p>Configure your Maxnate website content management preferences.</p>
+                    <div class="settings-info">
+                        <p><strong>Website:</strong> <span id="current-website">Maxnate Africa</span></p>
+                        <p><strong>Logged in as:</strong> <span id="user-email">—</span></p>
+                        <p><strong>Version:</strong> 1.0.0</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Universal Content Modal -->
+    <div id="content-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Add New Content</h2>
+                <button id="close-modal" class="close-btn">&times;</button>
+            </div>
+            
+            <form id="content-form" class="content-form">
+                <input type="hidden" id="content-type" name="content-type">
+                <input type="hidden" id="content-id" name="content-id">
+                
+                <div class="form-group">
+                    <label for="content-title">Title *</label>
+                    <input type="text" id="content-title" name="title" required placeholder="Enter title">
+                </div>
+
+                <div class="form-group">
+                    <label for="content-description">Description/Content *</label>
+                    <textarea id="content-description" name="description" rows="5" required placeholder="Enter description or content"></textarea>
+                </div>
+
+                <!-- Project-specific fields -->
+                <div class="form-group conditional-field" data-show-for="projects">
+                    <label for="content-category">Category</label>
+                    <select id="content-category" name="category">
+                        <option value="web-development">Web Development</option>
+                        <option value="software-development">Software Development</option>
+                        <option value="mobile-app">Mobile App</option>
+                        <option value="cloud-infrastructure">Cloud Infrastructure</option>
+                        <option value="agritech">AgriTech</option>
+                        <option value="e-commerce">E-Commerce</option>
+                    </select>
+                </div>
+
+                <div class="form-group conditional-field" data-show-for="projects">
+                    <label for="project-client">Client Name</label>
+                    <input type="text" id="project-client" name="client" placeholder="e.g., ABC Corporation">
+                </div>
+
+                <div class="form-group conditional-field" data-show-for="projects">
+                    <label for="project-url">Project URL (optional)</label>
+                    <input type="url" id="project-url" name="projectUrl" placeholder="https://example.com">
+                </div>
+
+                <div class="form-group conditional-field" data-show-for="projects">
+                    <label for="project-year">Completion Year</label>
+                    <input type="number" id="project-year" name="year" placeholder="2025" min="2020" max="2030">
+                </div>
+
+                <!-- News-specific fields -->
+                <div class="form-group conditional-field" data-show-for="news">
+                    <label for="news-badge">Badge/Type</label>
+                    <select id="news-badge" name="badge">
+                        <option value="Event">Event</option>
+                        <option value="News">News</option>
+                        <option value="Launch">Launch</option>
+                        <option value="Company">Company</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Award">Award</option>
+                        <option value="Partnership">Partnership</option>
+                    </select>
+                </div>
+
+                <div class="form-group conditional-field" data-show-for="news">
+                    <label for="news-category">Category</label>
+                    <input type="text" id="news-category" name="category" placeholder="e.g., Industry Event, Product Launch">
+                </div>
+
+                <div class="form-group conditional-field" data-show-for="news">
+                    <label for="news-date">Event/Publish Date *</label>
+                    <input type="date" id="news-date" name="date" required>
+                </div>
+
+                <div class="form-group conditional-field" data-show-for="news">
+                    <label for="news-link-text">Link Button Text</label>
+                    <input type="text" id="news-link-text" name="linkText" placeholder="e.g., Learn More, Read More" value="Learn More →">
+                </div>
+
+                <!-- Common fields -->
+                <div class="form-group">
+                    <label for="content-image">Image URL</label>
+                    <input type="url" id="content-image" name="image" placeholder="https://example.com/image.jpg">
+                    <small>Or upload file:</small>
+                    <input type="file" id="content-image-file" accept="image/*">
+                </div>
+
+                <!-- Upload Progress -->
+                <div id="upload-status" class="upload-status" aria-live="polite" style="display:none;">
+                    <div class="upload-row">
+                        <div class="upload-label" id="upload-label">Preparing...</div>
+                        <div class="upload-percent" id="upload-percent">0%</div>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" id="upload-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width:0%"></div>
+                        <div class="progress-indeterminate" id="upload-indeterminate" style="display:none;"></div>
+                    </div>
+                    <div class="upload-actions">
+                        <button type="button" id="upload-retry" class="btn-secondary btn-retry" style="display:none;">Retry</button>
+                    </div>
+                </div>
+
+                <div id="image-preview" class="image-preview">
+                    <img id="preview-img" src="" alt="Preview">
+                </div>
+
+                <div class="form-group">
+                    <label for="content-status">Status</label>
+                    <select id="content-status" name="status">
+                        <option value="published">Published</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancel-btn">Cancel</button>
+                    <button type="submit" class="btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+        <!-- Appwrite SDK -->
+        <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0/dist/appwrite.min.js"></script>
+        <!-- Appwrite Admin Config & Logic -->
+        <script src="js/appwrite-config.js"></script>
+        <script src="js/admin-appwrite.js"></script>
+
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('sw.js').catch(console.warn);
+                });
+            }
+        </script>
+
+        <!-- Toasts -->
+        <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+</body>
+</html>
