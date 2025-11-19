@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const repoRoot = __dirname;
+const repoRoot = path.resolve(__dirname, '..');
 const dist = path.join(repoRoot, 'dist');
 const distAdmin = path.join(dist, 'admin');
 const adminSrc = path.join(repoRoot, 'admin');
