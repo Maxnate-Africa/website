@@ -1,14 +1,16 @@
 [build]
-  command = "npm run build"
+  command = "npm run build:content"
   publish = "."
+  ignore = "git diff --quiet HEAD^ HEAD -- cms-admin/ content/"
+
+# Only rebuild when CMS or content changes
+# GitHub Pages handles public site deployment
 
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/cms-admin/index.html"
   status = 200
-  force = false
-  
-# Netlify Identity widget for Decap CMS authentication
+
 [[headers]]
   for = "/cms-admin/*"
   [headers.values]
