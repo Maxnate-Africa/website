@@ -78,16 +78,36 @@ For production admin access:
 
 ## Content Types
 
-### Websites
+### Settings (Single Files)
+
+#### Hero Content (`content/settings/hero.yml`)
+- Main title and subtitle
+- Call-to-action buttons (text, links, styles)
+- Background carousel images
+
+#### Contact Info (`content/settings/contact.yml`)
+- Email, phone, address
+- Business hours
+- Google Maps embed URL
+
+### Collections (Multiple Items)
+
+#### Services (`content/services/`)
+- Service name and description
+- Font Awesome icon class
+- Display order
+- Active/inactive status
+
+#### Websites (`content/websites/`)
 - Slug, Name, Domain, URL, Theme
 - Relation target for News/Projects
 
-### News
+#### News (`content/news/`)
 - Title, Description, Status, Category, Badge
 - Date, Link Text, Image
 - Related to Website
 
-### Projects
+#### Projects (`content/projects/`)
 - Title, Description, Status, Category
 - Client, Project URL, Year, Image
 - Related to Website
