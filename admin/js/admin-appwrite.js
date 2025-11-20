@@ -250,10 +250,26 @@
 
   async function createDefaultWebsite(){
     try {
+      const perms = cfg.adminsTeamId ? [
+        Permission.read(Role.any()),
+        Permission.update(Role.team(cfg.adminsTeamId)),
+        Permission.delete(Role.team(cfg.adminsTeamId)),
+        Permission.write(Role.team(cfg.adminsTeamId))
+      ] : [Permission.read(Role.any())];
+      
       await databases.createDocument(cfg.databaseId, cfg.websitesCollectionId, 'unique()', {
-        slug: 'maxnate', name: 'Maxnate Africa', domain: 'maxnate.com', createdAt: new Date().toISOString(), settings: { theme: 'teal', primaryColor: '#008080' }
-      });
-    } catch(err){ console.error('createDefaultWebsite error', err); }
+        slug: 'maxnate',
+        name: 'Maxnate Africa',
+        domain: 'maxnate.com',
+        url: 'https://maxnate.com',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        settings: { theme: 'teal', primaryColor: '#008080' }
+      }, perms);
+    } catch(err){ 
+      console.error('createDefaultWebsite error', err);
+      // If it fails, the collection might have different schema - user needs to create manually
+    }
   }
 
   // Content CRUD
