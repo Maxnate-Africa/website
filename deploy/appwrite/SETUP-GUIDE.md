@@ -35,27 +35,28 @@ Complete guide to configure your Appwrite backend for Maxnate Africa website.
 - Name: `News`
 - Permissions:
   - Read: `Any`
-  - Create: `Team:admins` (we'll create this team next)
+  - Create: `Team:admins` (Team ID: 691ebb420001973a90a4)
   - Update: `Team:admins`
   - Delete: `Team:admins`
 
 **Attributes:**
 ```
 - title (string, 200, required)
-- slug (string, 200, required, unique)
-- excerpt (string, 500, required)
-- content (string, 65535, required)
-- featuredImage (string, 500, required) - Appwrite file ID
-- author (string, 100, required)
-- publishedAt (datetime, required)
-- category (string, 50)
-- tags (string, 500) - comma-separated
-- isPublished (boolean, default: false)
+- description (string, 1000, required)
+- status (string, 50, default: "draft")
+- category (string, 100)
+- badge (string, 50)
+- date (datetime, required)
+- linkText (string, 100)
+- image (string, 500)
+- websiteId (string, 100, required)
+- createdAt (datetime, required)
+- updatedAt (datetime)
 ```
 
 **Indexes:**
-- `slug_unique` on `slug` (unique)
-- `published_date` on `publishedAt` (desc)
+- `website_status` on `websiteId` and `status`
+- `date_desc` on `date` (desc)
 
 ---
 
@@ -69,66 +70,53 @@ Complete guide to configure your Appwrite backend for Maxnate Africa website.
 **Attributes:**
 ```
 - title (string, 200, required)
-- slug (string, 200, required, unique)
 - description (string, 1000, required)
-- clientName (string, 100)
+- status (string, 50, default: "draft")
+- category (string, 100)
+- client (string, 200)
 - projectUrl (string, 500)
-- featuredImage (string, 500, required) - Appwrite file ID
-- gallery (string, 5000) - JSON array of file IDs
-- technologies (string, 500) - comma-separated
-- category (string, 50, required) - e.g., "web", "mobile", "branding"
-- completedAt (datetime)
-- isFeatured (boolean, default: false)
-- isPublished (boolean, default: false)
+- year (string, 4)
+- image (string, 500)
+- websiteId (string, 100, required)
+- createdAt (datetime, required)
+- updatedAt (datetime)
 ```
 
 **Indexes:**
-- `slug_unique` on `slug` (unique)
+- `website_status` on `websiteId` and `status`
 - `category_idx` on `category`
 
 ---
 
-### Collection 3: Offers
-
-**Collection Settings:**
-- Collection ID: `offers`
-- Name: `Offers`
-- Permissions: Same as News
-
-**Attributes:**
-```
-- title (string, 200, required)
-- description (string, 1000, required)
-- price (string, 50)
-- features (string, 5000) - JSON array of features
-- icon (string, 100) - icon name or class
-- isActive (boolean, default: true)
-- displayOrder (integer, default: 0)
-```
-
-**Indexes:**
-- `display_order` on `displayOrder` (asc)
-
----
-
-### Collection 4: Websites (Client Portfolio)
+### Collection 3: Websites (Multi-Tenant Management)
 
 **Collection Settings:**
 - Collection ID: `websites`
-- Name: `Client Websites`
+- Name: `Websites`
 - Permissions: Same as News
 
 **Attributes:**
 ```
 - name (string, 200, required)
-- url (string, 500, required)
-- screenshot (string, 500) - Appwrite file ID
-- clientName (string, 100)
-- category (string, 50)
-- technologies (string, 500)
-- description (string, 1000)
-- launchedAt (datetime)
-- isActive (boolean, default: true)
+- slug (string, 100) - URL-friendly identifier (optional, uses $id if empty)
+- domain (string, 200)
+- url (string, 500)
+- settings (string, 5000) - JSON settings object
+- createdAt (datetime)
+- updatedAt (datetime)
+```
+
+**Indexes:**
+- `name_idx` on `name`
+
+**Create Your First Website:**
+After creating the collection, add a document:
+```
+name: Maxnate Africa
+slug: maxnate
+domain: maxnate.com
+url: https://maxnate.com
+createdAt: (today's date)
 ```
 
 ## Step 4: Create Storage Bucket
@@ -152,11 +140,13 @@ Complete guide to configure your Appwrite backend for Maxnate Africa website.
 
 1. Go to **Auth** → **Teams** → **Create Team**
 2. Team Name: `CMS Admins`
-3. After creation, note the **Team ID** (you'll need this)
+3. After creation, note the **Team ID**
+   - Your Team ID: `691ebb420001973a90a4`
 4. Add team members:
    - Go to the team → **Add Member**
    - Enter email addresses of admin users
    - They'll receive invitations to join
+5. **Important:** Members of this team are **Super Admins** with full access to ALL websites in the CMS
 
 ## Step 6: Create User-Website Access Collection (Multi-Tenant Support)
 
@@ -189,41 +179,48 @@ This collection allows you to assign specific websites to users, enabling you to
 - Users who are members of the `CMS Admins` team are **Super Admins** and automatically have access to ALL websites
 - Other users only see websites they've been explicitly granted access to
 
-## Step 7: Update Admin Config with Team ID
+## Step 7: Verify Admin Config
 
-After creating the team, copy its ID and update:
+The configuration has been pre-set for your project:
 
 **File:** `admin/js/appwrite-config.js`
 
 ```javascript
-adminsTeamId: "YOUR_TEAM_ID_HERE",
-userWebsiteAccessCollectionId: "user_website_access"
+projectId: "691de2b2000699d6898f",
+adminsTeamId: "691ebb420001973a90a4",
+userWebsiteAccessCollectionId: "user_website_access",
+databaseId: "website_db",
+newsCollectionId: "news",
+projectsCollectionId: "projects",
+websitesCollectionId: "websites"
 ```
 
-Then commit and push:
-```bash
-git add admin/js/appwrite-config.js
-git commit -m "Add Appwrite admin team ID"
-git push
-```
+✅ Configuration is already complete and pushed to GitHub/Vercel.
 
 ## Step 8: Test the Setup
 
+### Test Admin CMS
+
+1. Visit: <https://website-orpin-omega-56.vercel.app/>
+2. Click "Sign In"
+3. Sign in with your admin account
+4. Accept the team invitation email if you haven't already
+5. You should see the admin dashboard with all sections:
+   - Projects
+   - News
+   - Websites (manage multiple sites)
+   - Users (assign website access to users)
+   - Settings
+6. Test creating content in each section
+
 ### Test Public Website
-1. Visit: https://maxnate-africa.github.io/website/
+
+1. Visit: <https://maxnate-africa.github.io/website/>
 2. Open browser console (F12)
 3. Check for Appwrite connection errors
-4. Try loading news/projects (should show empty or data if you added any)
+4. News and projects should load from Appwrite
 
-### Test Admin CMS
-1. Visit: https://website-orpin-omega-56.vercel.app/
-2. Click "Sign In"
-3. Create an account or sign in
-4. You should see the admin dashboard
-5. Try uploading an image to test storage
-6. Try creating a news article
-
-## Step 8: Add Sample Data (Optional)
+## Step 9: Add Sample Data (Optional)
 
 You can add sample data via the Appwrite Console:
 
@@ -272,13 +269,14 @@ You can add sample data via the Appwrite Console:
 
 1. ✅ Configure platforms (CORS)
 2. ✅ Create database and collections
-3. ✅ Set up storage bucket
-4. ✅ Create admin team
-5. ⬜ Add team ID to config
-6. ⬜ Invite team members
-7. ⬜ Test authentication
-8. ⬜ Add sample content
-9. ⬜ Launch! 🚀
+3. ✅ Create admin team (ID: 691ebb420001973a90a4)
+4. ✅ Update config files
+5. ✅ Create first website document
+6. ⬜ Set up storage bucket (optional)
+7. ⬜ Create `user_website_access` collection (for multi-tenant access control)
+8. ⬜ Invite additional team members
+9. ⬜ Add sample content (news, projects)
+10. ⬜ Launch! 🚀
 
 ## Support
 
