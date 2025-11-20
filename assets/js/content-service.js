@@ -1,4 +1,4 @@
-// Static data service - replaces Appwrite calls with JSON file fetching
+// Static data service - fetches content from JSON files
 // Content is built from markdown at build time by scripts/build-content.js
 
 const DATA_BASE = '/assets/data';
@@ -52,6 +52,11 @@ class ContentService {
 
   async getContact() {
     return await this.fetchJSON('contact.json');
+  }
+
+  async getOffers(filters = {}) {
+    const allOffers = await this.fetchJSON('offers.json') || [];
+    return this.filterContent(allOffers, filters);
   }
 
   filterContent(items, filters) {

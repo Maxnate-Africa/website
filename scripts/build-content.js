@@ -126,6 +126,28 @@ function readContact() {
   return yaml.load(content);
 }
 
+// Read offers
+function readOffers() {
+  const offersDir = path.join(contentDir, 'offers');
+  if (!fs.existsSync(offersDir)) return [];
+  
+  const files = fs.readdirSync(offersDir).filter(f => f.endsWith('.md'));
+  return files.map(file => {
+    const content = fs.readFileSync(path.join(offersDir, file), 'utf8');
+    const { data } = matter(content);
+    return {
+      id: path.basename(file, '.md'),
+      title: data.title,
+      description: data.description,
+      discount: data.discount || '',
+      category: data.category || '',
+      expiry: data.expiry || null,
+      status: data.status || 'draft',
+      createdAt: data.createdAt
+    };
+  });
+}
+
 // Build data
 const websites = readWebsites();
 const news = readNews();
@@ -133,11 +155,13 @@ const projects = readProjects();
 const hero = readHero();
 const services = readServices();
 const contact = readContact();
+const offers = readOffers();
 
 // Filter published content for public site
 const publishedNews = news.filter(n => n.status === 'published');
 const publishedProjects = projects.filter(p => p.status === 'published');
 const activeServices = services.filter(s => s.status === 'active');
+const publishedOffers = offers.filter(o => o.status === 'published');
 
 // Write output files
 fs.writeFileSync(
@@ -174,10 +198,16 @@ if (contact) {
   );
 }
 
+fs.writeFileSync(
+  path.join(outputDir, 'offers.json'),
+  JSON.stringify(publishedOffers, null, 2)
+);
+
 console.log(`✓ Built ${websites.length} websites`);
 console.log(`✓ Built ${publishedNews.length}/${news.length} news articles (published)`);
 console.log(`✓ Built ${publishedProjects.length}/${projects.length} projects (published)`);
 console.log(`✓ Built hero content: ${hero ? 'yes' : 'no'}`);
 console.log(`✓ Built ${activeServices.length}/${services.length} services (active)`);
 console.log(`✓ Built contact info: ${contact ? 'yes' : 'no'}`);
+console.log(`✓ Built ${publishedOffers.length}/${offers.length} offers (published)`);
 console.log('Content build complete!');

@@ -89,3 +89,23 @@ collections:
       - { label: "Year", name: "year", widget: "number", value_type: "int", min: 2000, max: 2100, required: false }
       - { label: "Image", name: "image", widget: "image", required: false }
       - { label: "Created Date", name: "createdAt", widget: "datetime", default: "" }
+
+  # Offers Collection
+  - name: "offers"
+    label: "Offers"
+    label_singular: "Offer"
+    folder: "content/offers"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Discount/Value", name: "discount", widget: "string", hint: "e.g., 20% OFF, $500" }
+      - { label: "Category", name: "category", widget: "string", required: false }
+      - { label: "Expiry Date", name: "expiry", widget: "datetime", required: false }
+      - label: "Status"
+        name: "status"
+        widget: "select"
+        options: ["draft", "published"]
+        default: "draft"
+      - { label: "Created Date", name: "createdAt", widget: "datetime", default: "" }

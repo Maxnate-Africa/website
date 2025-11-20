@@ -396,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ===========================
-// DYNAMIC CONTENT (APPWRITE) - PROJECTS & NEWS
+// DYNAMIC CONTENT - PROJECTS & NEWS
 // ===========================
 // SKELETON LOADERS
 // ===========================

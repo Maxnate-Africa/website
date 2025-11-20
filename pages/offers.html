@@ -21,10 +21,8 @@
   <!-- Active Offer Overlay injected dynamically -->
   <div id="offerOverlayMount"></div>
 
-  <!-- Appwrite SDK (CDN) and public config/helper -->
-  <script src="https://cdn.jsdelivr.net/npm/appwrite@13.0.0/dist/appwrite.min.js"></script>
-  <script src="../assets/js/appwrite-config.js"></script>
-  <script src="../assets/js/appwrite-public.js"></script>
+  <!-- Content service -->
+  <script src="../assets/js/content-service.js"></script>
 
   <script>
     const WHATSAPP_NUMBER = '255746662612';
@@ -83,20 +81,26 @@
     }
 
     async function loadOffers(){
-      const useAppwrite = window.AppwriteFetch && window.AppwriteFetch.init();
       const container = document.getElementById('offersContainer');
       const empty = document.getElementById('offersEmpty');
-      if (useAppwrite) {
-        const list = await window.AppwriteFetch.getOffers(12);
-        const active = list.filter(o=> (o.status||'draft')==='published');
-        if (!active.length){ empty.style.display='block'; return; }
+      
+      try {
+        const offers = await window.contentService.getOffers({ limit: 12 });
+        const active = offers.filter(o=> (o.status||'draft')==='published');
+        
+        if (!active.length){ 
+          empty.style.display='block'; 
+          return; 
+        }
+        
         container.innerHTML = active.map(renderOfferCard).join('');
         const now = Date.now();
         const first = active.find(o=> !o.expiry || new Date(o.expiry).getTime() > now);
         if (first) injectOverlay(first);
-        return;
+      } catch (error) {
+        console.error('Failed to load offers:', error);
+        empty.style.display='block';
       }
-      empty.style.display='block';
     }
 
     document.addEventListener('DOMContentLoaded', loadOffers);

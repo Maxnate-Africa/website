@@ -8,7 +8,7 @@ const dist = path.join(repoRoot, 'dist');
 const distAdmin = path.join(dist, 'admin');
 const adminSrc = path.join(repoRoot, 'admin');
 
-console.log('Building dist/admin for Vercel...');
+console.log('Building dist/admin...');
 
 // Ensure dist/admin exists
 if (!fs.existsSync(distAdmin)) {
