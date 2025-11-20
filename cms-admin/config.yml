@@ -1,0 +1,94 @@
+backend:
+  name: github
+  repo: Maxnate-Africa/website
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+# Alternative for local development:
+# local_backend: true
+
+media_folder: "assets/images/uploads"
+public_folder: "/assets/images/uploads"
+
+# Site URL for preview
+site_url: https://maxnate.com
+
+collections:
+  # Websites Collection - Multi-tenant setup
+  - name: "websites"
+    label: "Websites"
+    label_singular: "Website"
+    folder: "content/websites"
+    create: true
+    identifier_field: slug
+    slug: "{{slug}}"
+    fields:
+      - { label: "Slug", name: "slug", widget: "string", pattern: ['^[a-z0-9-]+$', "Only lowercase letters, numbers, and hyphens"], hint: "URL-friendly identifier (e.g., maxnate)" }
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Domain", name: "domain", widget: "string", required: false }
+      - { label: "URL", name: "url", widget: "string", required: false }
+      - label: "Theme"
+        name: "theme"
+        widget: "select"
+        options: ["teal", "blue", "red", "purple", "green"]
+        default: "teal"
+      - { label: "Created Date", name: "createdAt", widget: "datetime" }
+
+  # News Collection
+  - name: "news"
+    label: "News"
+    label_singular: "News Article"
+    folder: "content/news"
+    create: true
+    slug: "{{website}}-{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - label: "Website"
+        name: "website"
+        widget: "relation"
+        collection: "websites"
+        search_fields: ["name", "slug"]
+        value_field: "slug"
+        display_fields: ["name"]
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - label: "Status"
+        name: "status"
+        widget: "select"
+        options: ["draft", "published"]
+        default: "draft"
+      - { label: "Category", name: "category", widget: "string", required: false }
+      - { label: "Badge", name: "badge", widget: "string", required: false, hint: "e.g., New, Featured" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - { label: "Link Text", name: "linkText", widget: "string", default: "Learn More →" }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Created Date", name: "createdAt", widget: "datetime", default: "" }
+
+  # Projects Collection
+  - name: "projects"
+    label: "Projects"
+    label_singular: "Project"
+    folder: "content/projects"
+    create: true
+    slug: "{{website}}-{{slug}}"
+    fields:
+      - label: "Website"
+        name: "website"
+        widget: "relation"
+        collection: "websites"
+        search_fields: ["name", "slug"]
+        value_field: "slug"
+        display_fields: ["name"]
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Description", name: "description", widget: "text" }
+      - label: "Status"
+        name: "status"
+        widget: "select"
+        options: ["draft", "published"]
+        default: "draft"
+      - { label: "Category", name: "category", widget: "string", required: false }
+      - { label: "Client", name: "client", widget: "string", required: false }
+      - { label: "Project URL", name: "projectUrl", widget: "string", required: false }
+      - { label: "Year", name: "year", widget: "number", value_type: "int", min: 2000, max: 2100, required: false }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Created Date", name: "createdAt", widget: "datetime", default: "" }

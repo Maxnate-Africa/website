@@ -1,0 +1,18 @@
+{
+  "name": "maxnate-website",
+  "version": "1.0.0",
+  "description": "Maxnate Africa multi-tenant website with Decap CMS",
+  "scripts": {
+    "build": "node scripts/build-content.js && node scripts/build-admin.js",
+    "build:content": "node scripts/build-content.js",
+    "build:admin": "node scripts/build-admin.js",
+    "dev": "npm run build:content && npx http-server -p 8080"
+  },
+  "dependencies": {
+    "gray-matter": "^4.0.3"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=16"
+  }
+}

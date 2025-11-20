@@ -1,0 +1,10 @@
+---
+slug: maxnate
+name: Maxnate Africa
+domain: maxnate.com
+url: https://maxnate.com
+theme: teal
+createdAt: 2025-11-20T00:00:00.000Z
+---
+
+Main Maxnate Africa website.

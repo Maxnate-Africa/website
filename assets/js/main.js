@@ -436,7 +436,7 @@ function createNewsSkeleton() {
 // ===========================
 document.addEventListener('DOMContentLoaded', async function() {
     try {
-        if (!window.AppwriteFetch || !window.AppwriteFetch.init()) return; // Not configured: keep static content
+        if (!window.contentService) return; // Service not loaded: keep static content
 
         // Render Projects
         const projectsGrid = document.querySelector('#projects .projects-grid');
@@ -444,7 +444,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Show skeleton loaders
             projectsGrid.innerHTML = Array(3).fill(0).map(() => createProjectSkeleton()).join('');
             
-            const projects = await window.AppwriteFetch.getProjects(6);
+            const projects = await window.contentService.getProjects({ 
+                website: 'maxnate', 
+                limit: 6 
+            });
             if (projects && projects.length) {
                 projectsGrid.innerHTML = projects.map(p => {
                     const imgStyle = p.image ? `style=\"background-image:url('${p.image}')\"` : '';
@@ -465,6 +468,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }).join('');
                 // Observe new items for animations
                 document.querySelectorAll('#projects .project-card').forEach(el => { try { observer.observe(el); } catch {} });
+            } else {
+                projectsGrid.innerHTML = '<p class="empty-state">No projects available yet.</p>';
             }
         }
 
@@ -474,7 +479,10 @@ document.addEventListener('DOMContentLoaded', async function() {
             // Show skeleton loaders
             newsGrid.innerHTML = Array(3).fill(0).map(() => createNewsSkeleton()).join('');
             
-            const news = await window.AppwriteFetch.getNews(6);
+            const news = await window.contentService.getNews({ 
+                website: 'maxnate', 
+                limit: 6 
+            });
             if (news && news.length) {
                 newsGrid.innerHTML = news.map((n, idx) => {
                     const dateTxt = n.date ? new Date(n.date).toLocaleDateString() : '';
@@ -500,10 +508,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                 // Reset Show More button state
                 const showMoreBtn = document.getElementById('showMoreNews');
                 if (showMoreBtn) { showMoreBtn.setAttribute('aria-expanded','false'); showMoreBtn.innerHTML = '<i class="fas fa-plus"></i> Show More'; }
+            } else {
+                newsGrid.innerHTML = '<p class="empty-state">No news available yet.</p>';
             }
         }
     } catch (e) {
-        console.warn('Dynamic content load skipped', e);
+        console.warn('Dynamic content load failed:', e);
     }
 });
 
