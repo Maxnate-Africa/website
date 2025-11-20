@@ -4,7 +4,6 @@ package-lock.json
 
 # Build output
 dist/
-assets/data/*.json
 
 # CMS
 .decap-server/
