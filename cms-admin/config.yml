@@ -34,7 +34,7 @@ collections:
 
   # News Collection
   - name: "news"
-    label: "News"
+    label: "News & Events"
     label_singular: "News Article"
     folder: "content/news"
     create: true
@@ -55,7 +55,19 @@ collections:
         options: ["draft", "published"]
         default: "draft"
       - { label: "Category", name: "category", widget: "string", required: false }
-      - { label: "Badge", name: "badge", widget: "string", required: false, hint: "e.g., New, Featured" }
+      - label: "Badge"
+        name: "badge"
+        widget: "select"
+        options: ["", "New", "Featured", "Hot", "Trending", "Event"]
+        required: false
+        hint: "Select a badge label for this news item"
+      - label: "Badge Animation"
+        name: "badgeAnimation"
+        widget: "select"
+        options: ["none", "blink", "pulse", "bounce"]
+        default: "none"
+        required: false
+        hint: "Animation effect for the badge"
       - { label: "Date", name: "date", widget: "datetime" }
       - { label: "Link Text", name: "linkText", widget: "string", default: "Learn More →" }
       - { label: "Image", name: "image", widget: "image", required: false }
@@ -68,6 +80,7 @@ collections:
     folder: "content/projects"
     create: true
     slug: "{{website}}-{{slug}}"
+    summary: "{{title}} - {{client}}"
     fields:
       - label: "Website"
         name: "website"
@@ -76,18 +89,18 @@ collections:
         search_fields: ["name", "slug"]
         value_field: "slug"
         display_fields: ["name"]
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Title", name: "title", widget: "string", hint: "Project name" }
+      - { label: "Description", name: "description", widget: "text", hint: "Brief project description" }
       - label: "Status"
         name: "status"
         widget: "select"
         options: ["draft", "published"]
         default: "draft"
-      - { label: "Category", name: "category", widget: "string", required: false }
-      - { label: "Client", name: "client", widget: "string", required: false }
-      - { label: "Project URL", name: "projectUrl", widget: "string", required: false }
-      - { label: "Year", name: "year", widget: "number", value_type: "int", min: 2000, max: 2100, required: false }
-      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Category", name: "category", widget: "string", hint: "e.g., Web App, Mobile, Cloud", required: false }
+      - { label: "Client", name: "client", widget: "string", hint: "Client or company name", required: false }
+      - { label: "Project URL", name: "projectUrl", widget: "string", hint: "Live project URL", required: false }
+      - { label: "Year", name: "year", widget: "number", value_type: "int", min: 2000, max: 2100, hint: "Completion year", required: false }
+      - { label: "Image", name: "image", widget: "image", hint: "Project screenshot or logo", required: false }
       - { label: "Created Date", name: "createdAt", widget: "datetime", default: "" }
 
   # Offers Collection
@@ -97,12 +110,25 @@ collections:
     folder: "content/offers"
     create: true
     slug: "{{slug}}"
+    summary: "{{title}} - {{discount}}"
     fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Title", name: "title", widget: "string", hint: "Offer title" }
+      - { label: "Description", name: "description", widget: "text", hint: "Offer details" }
       - { label: "Discount/Value", name: "discount", widget: "string", hint: "e.g., 20% OFF, $500" }
-      - { label: "Category", name: "category", widget: "string", required: false }
-      - { label: "Expiry Date", name: "expiry", widget: "datetime", required: false }
+      - label: "Icon"
+        name: "icon"
+        widget: "select"
+        options: ["🔥", "⚡", "💎", "🎁", "🎉", "✨", "💰", "🚀", "⭐", "🏆"]
+        default: "🔥"
+        hint: "Special icon for this offer"
+      - label: "Icon Animation"
+        name: "iconAnimation"
+        widget: "select"
+        options: ["none", "bounce", "pulse", "rotate", "shake"]
+        default: "bounce"
+        hint: "Animation effect for the icon"
+      - { label: "Category", name: "category", widget: "string", hint: "Service category", required: false }
+      - { label: "Expiry Date", name: "expiry", widget: "datetime", hint: "When offer expires", required: false }
       - label: "Status"
         name: "status"
         widget: "select"
@@ -110,10 +136,60 @@ collections:
         default: "draft"
       - { label: "Created Date", name: "createdAt", widget: "datetime", default: "" }
 
+  # Services Collection
+  - name: "services"
+    label: "Services"
+    label_singular: "Service"
+    folder: "content/services"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: "name"
+    summary: "{{name}}"
+    fields:
+      - { label: "Service Name", name: "name", widget: "string", hint: "Service title" }
+      - { label: "Description", name: "description", widget: "text", hint: "Brief description of the service" }
+      - label: "Icon"
+        name: "icon"
+        widget: "select"
+        options: ["fa-code", "fa-mobile-alt", "fa-cloud", "fa-server", "fa-database", "fa-network-wired", "fa-cogs", "fa-shield-alt", "fa-chart-line", "fa-laptop-code", "fa-rocket", "fa-brain", "fa-leaf", "fa-palette", "fa-graduation-cap"]
+        default: "fa-cogs"
+        hint: "FontAwesome icon class"
+      - { label: "Order", name: "order", widget: "number", value_type: "int", default: 0, hint: "Display order (lower numbers appear first)" }
+      - label: "Status"
+        name: "status"
+        widget: "select"
+        options: ["active", "inactive"]
+        default: "active"
+
   # Settings - Pages
   - name: "pages"
     label: "Page Settings"
     files:
+      - label: "Hero Section"
+        name: "hero"
+        file: "content/settings/hero.yml"
+        fields:
+          - { label: "Hero Title", name: "title", widget: "string", default: "Innovating for Smarter Future" }
+          - { label: "Hero Subtitle", name: "subtitle", widget: "text", default: "Building scalable, innovative digital solutions for businesses and beyond" }
+          - label: "Carousel Images"
+            name: "images"
+            widget: "list"
+            min: 1
+            max: 5
+            field: { label: "Image Path", name: "image", widget: "image" }
+            hint: "Upload up to 5 images for the hero carousel"
+          - label: "Call-to-Action Buttons"
+            name: "buttons"
+            widget: "list"
+            fields:
+              - { label: "Button Text", name: "text", widget: "string" }
+              - { label: "Button Link", name: "link", widget: "string" }
+              - label: "Button Style"
+                name: "style"
+                widget: "select"
+                options: ["primary", "secondary"]
+                default: "primary"
+      
       - label: "Offers Page"
         name: "offers-page"
         file: "content/settings/offers-page.yml"

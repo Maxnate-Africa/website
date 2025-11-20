@@ -76,8 +76,12 @@
     function renderOfferCard(offer){
       const code = generateOfferCode(offer.id);
       const expiryTxt = offer.expiry ? new Date(offer.expiry).toLocaleDateString() : 'N/A';
+      const iconClass = offer.iconAnimation && offer.iconAnimation !== 'none' ? `icon-${offer.iconAnimation}` : 'icon-none';
+      const icon = offer.icon || '🔥';
+      
       return `<div class="offer-card" data-offer-id="${offer.id}">
         <span class="offer-badge">${offer.discount? 'SAVE' : 'OFFER'}</span>
+        <div class="offer-icon ${iconClass}">${icon}</div>
         <div class="offer-discount">${offer.discount || offer.value || ''}</div>
         <h3 class="offer-title">${offer.title}</h3>
         <p class="offer-desc">${offer.description || ''}</p>
