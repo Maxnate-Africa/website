@@ -677,9 +677,17 @@
     
     // Handle Website save
     if (currentContentType === 'websites' || document.getElementById('content-type').value === 'websites'){
+      // Build website payload and ensure slug exists (derive from name if empty)
+      const rawSlug = document.getElementById('website-slug').value.toLowerCase().trim();
+      const rawName = document.getElementById('website-name').value.trim();
+      const derivedSlug = rawSlug || (rawName ? rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') : '');
+      if (!derivedSlug){
+        alert('Please provide a valid slug or website name to auto-generate one.');
+        return;
+      }
       const websiteData = {
-        slug: document.getElementById('website-slug').value.toLowerCase().trim(),
-        name: document.getElementById('website-name').value.trim(),
+        slug: derivedSlug,
+        name: rawName,
         domain: document.getElementById('website-domain').value.trim(),
         settings: {
           theme: document.getElementById('website-theme').value,

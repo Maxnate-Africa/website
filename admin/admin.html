@@ -258,13 +258,13 @@
                 <!-- Website-specific fields -->
                 <div class="form-group conditional-field" data-show-for="websites">
                     <label for="website-slug">Slug (URL identifier) *</label>
-                    <input type="text" id="website-slug" name="slug" placeholder="e.g., maxnate, client-name" pattern="[a-z0-9-]+">
+                    <input type="text" id="website-slug" name="slug" placeholder="e.g., maxnate, client-name" pattern="[a-z0-9-]+" required>
                     <small>Lowercase letters, numbers, and hyphens only</small>
                 </div>
 
                 <div class="form-group conditional-field" data-show-for="websites">
                     <label for="website-name">Website Name *</label>
-                    <input type="text" id="website-name" name="name" placeholder="e.g., Maxnate Africa">
+                    <input type="text" id="website-name" name="name" placeholder="e.g., Maxnate Africa" required>
                 </div>
 
                 <div class="form-group conditional-field" data-show-for="websites">
