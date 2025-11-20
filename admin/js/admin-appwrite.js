@@ -779,7 +779,23 @@
   function updateConditionalFields(){
     document.querySelectorAll('.conditional-field').forEach(f => {
       const showFor = f.getAttribute('data-show-for');
-      if (showFor === currentContentType) f.classList.add('visible'); else f.classList.remove('visible');
+      const isVisible = (showFor === currentContentType);
+      if (isVisible) f.classList.add('visible'); else f.classList.remove('visible');
+
+      // Toggle input validity/interaction to avoid hidden required errors
+      const controls = f.querySelectorAll('input, select, textarea, button');
+      controls.forEach(ctrl => {
+        // Preserve original required state once
+        if (ctrl.dataset && ctrl.dataset.originalRequired === undefined) {
+          ctrl.dataset.originalRequired = ctrl.required ? 'true' : 'false';
+        }
+        // Disable when hidden so the browser doesn't validate or submit it
+        ctrl.disabled = !isVisible;
+        // Only require when visible and originally required
+        if (ctrl.dataset && ctrl.dataset.originalRequired !== undefined) {
+          ctrl.required = isVisible && ctrl.dataset.originalRequired === 'true';
+        }
+      });
     });
   }
 
