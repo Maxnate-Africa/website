@@ -76,10 +76,10 @@
   async function hasAdminAccess(){
     if (!cfg.adminsTeamId) return true; // no team restriction configured
     try {
-      // Check current user's memberships for the admins team
-      const memberships = await account.listMemberships();
-      const list = memberships.memberships || memberships.total ? memberships.memberships : (memberships?.data || []);
-      return (list || []).some(m => m.teamId === cfg.adminsTeamId || m.team?.$id === cfg.adminsTeamId);
+      // Check if user is member of the admins team
+      const teamsList = await teams.list();
+      const userTeams = teamsList.teams || [];
+      return userTeams.some(t => t.$id === cfg.adminsTeamId);
     } catch (e){
       console.warn('Unable to check team memberships', e);
       return false;
