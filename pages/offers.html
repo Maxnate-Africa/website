@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Current Offers | Maxnate Africa</title>
+  <title id="pageTitle">Current Offers | Maxnate Africa</title>
   <link rel="stylesheet" href="../assets/css/main.css" />
-  <meta name="description" content="Latest technology service offers from Maxnate Africa." />
+  <meta name="description" content="Latest technology service offers from Maxnate Africa." id="pageDescription" />
 </head>
 <body>
   <header class="page-header" style="padding:2rem 0 0; text-align:center;">
-    <h1 class="section-title">Latest Offers</h1>
-    <p class="section-subtitle">Claim exclusive, time‑limited technology service discounts.</p>
+    <h1 class="section-title" id="headerTitle">Latest Offers</h1>
+    <p class="section-subtitle" id="headerSubtitle">Claim exclusive, time‑limited technology service discounts.</p>
   </header>
 
   <main class="offers-page container">
@@ -25,7 +25,40 @@
   <script src="../assets/js/content-service.js"></script>
 
   <script>
-    const WHATSAPP_NUMBER = '255746662612';
+    let WHATSAPP_NUMBER = '255746662612';
+    let pageSettings = null;
+
+    // Load page settings
+    async function loadPageSettings() {
+      try {
+        const response = await fetch('/assets/data/offers-page.json');
+        if (response.ok) {
+          pageSettings = await response.json();
+          
+          // Update page metadata and content
+          if (pageSettings.title) {
+            document.getElementById('pageTitle').textContent = `${pageSettings.title} | Maxnate Africa`;
+          }
+          if (pageSettings.metaDescription) {
+            document.getElementById('pageDescription').setAttribute('content', pageSettings.metaDescription);
+          }
+          if (pageSettings.headerTitle) {
+            document.getElementById('headerTitle').textContent = pageSettings.headerTitle;
+          }
+          if (pageSettings.headerSubtitle) {
+            document.getElementById('headerSubtitle').textContent = pageSettings.headerSubtitle;
+          }
+          if (pageSettings.emptyMessage) {
+            document.getElementById('offersEmpty').textContent = pageSettings.emptyMessage;
+          }
+          if (pageSettings.whatsappNumber) {
+            WHATSAPP_NUMBER = pageSettings.whatsappNumber;
+          }
+        }
+      } catch (error) {
+        console.warn('Page settings not found, using defaults:', error);
+      }
+    }
 
     function generateOfferCode(id){
       const date = new Date();
@@ -103,7 +136,10 @@
       }
     }
 
-    document.addEventListener('DOMContentLoaded', loadOffers);
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadPageSettings();
+      await loadOffers();
+    });
   </script>
 </body>
 </html>

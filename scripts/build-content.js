@@ -126,6 +126,15 @@ function readContact() {
   return yaml.load(content);
 }
 
+// Read offers page settings
+function readOffersPage() {
+  const offersPageFile = path.join(contentDir, 'settings', 'offers-page.yml');
+  if (!fs.existsSync(offersPageFile)) return null;
+  
+  const content = fs.readFileSync(offersPageFile, 'utf8');
+  return yaml.load(content);
+}
+
 // Read offers
 function readOffers() {
   const offersDir = path.join(contentDir, 'offers');
@@ -155,6 +164,7 @@ const projects = readProjects();
 const hero = readHero();
 const services = readServices();
 const contact = readContact();
+const offersPage = readOffersPage();
 const offers = readOffers();
 
 // Filter published content for public site
@@ -198,6 +208,13 @@ if (contact) {
   );
 }
 
+if (offersPage) {
+  fs.writeFileSync(
+    path.join(outputDir, 'offers-page.json'),
+    JSON.stringify(offersPage, null, 2)
+  );
+}
+
 fs.writeFileSync(
   path.join(outputDir, 'offers.json'),
   JSON.stringify(publishedOffers, null, 2)
@@ -209,5 +226,6 @@ console.log(`✓ Built ${publishedProjects.length}/${projects.length} projects (
 console.log(`✓ Built hero content: ${hero ? 'yes' : 'no'}`);
 console.log(`✓ Built ${activeServices.length}/${services.length} services (active)`);
 console.log(`✓ Built contact info: ${contact ? 'yes' : 'no'}`);
+console.log(`✓ Built offers page settings: ${offersPage ? 'yes' : 'no'}`);
 console.log(`✓ Built ${publishedOffers.length}/${offers.length} offers (published)`);
 console.log('Content build complete!');

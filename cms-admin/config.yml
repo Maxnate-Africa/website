@@ -109,3 +109,18 @@ collections:
         options: ["draft", "published"]
         default: "draft"
       - { label: "Created Date", name: "createdAt", widget: "datetime", default: "" }
+
+  # Settings - Pages
+  - name: "pages"
+    label: "Page Settings"
+    files:
+      - label: "Offers Page"
+        name: "offers-page"
+        file: "content/settings/offers-page.yml"
+        fields:
+          - { label: "Page Title", name: "title", widget: "string", default: "Current Offers" }
+          - { label: "Meta Description", name: "metaDescription", widget: "text", default: "Latest technology service offers from Maxnate Africa." }
+          - { label: "Header Title", name: "headerTitle", widget: "string", default: "Latest Offers" }
+          - { label: "Header Subtitle", name: "headerSubtitle", widget: "text", default: "Claim exclusive, time‑limited technology service discounts." }
+          - { label: "Empty State Message", name: "emptyMessage", widget: "string", default: "No active offers right now. Check back soon." }
+          - { label: "WhatsApp Number", name: "whatsappNumber", widget: "string", default: "255746662612", hint: "Country code + phone number without + or spaces" }
