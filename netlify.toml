@@ -1,0 +1,17 @@
+[build]
+  command = "npm run build"
+  publish = "."
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  force = false
+  
+# Netlify Identity widget for Decap CMS authentication
+[[headers]]
+  for = "/cms-admin/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

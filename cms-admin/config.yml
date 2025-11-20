@@ -1,12 +1,9 @@
 backend:
-  name: github
-  repo: Maxnate-Africa/website
+  name: git-gateway
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
 
-# Alternative for local development:
-# local_backend: true
+# For Netlify Identity authentication
+# Deploy to Netlify and enable Identity service in site settings
 
 media_folder: "assets/images/uploads"
 public_folder: "/assets/images/uploads"

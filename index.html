@@ -20,6 +20,9 @@
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/images/logo/favicon.png">
+    
+    <!-- Netlify Identity Widget (for CMS authentication) -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
     <!-- NAVIGATION BAR -->
@@ -389,5 +392,18 @@
     <!-- Static content service (replaces Appwrite) -->
     <script src="assets/js/content-service.js"></script>
     <script src="assets/js/main.js"></script>
+    
+    <!-- Netlify Identity redirect handling -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/cms-admin/";
+            });
+          }
+        });
+      }
+    </script>
 </body>
 </html>
