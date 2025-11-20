@@ -736,8 +736,12 @@
       contentData.linkText = document.getElementById('news-link-text').value || 'Learn More →';
       if (!contentData.date){ alert('Please select a date'); return; }
     }
-    const imageUrl = document.getElementById('content-image').value;
-    if (imageUrl) contentData.image = imageUrl;
+    const imageUrl = document.getElementById('content-image').value?.trim();
+    if (imageUrl) {
+      contentData.image = imageUrl;
+    } else {
+      contentData.image = null; // Set to null instead of undefined
+    }
 
     const collectionId = currentContentType === 'projects' ? cfg.projectsCollectionId : cfg.newsCollectionId;
     try {
@@ -781,19 +785,28 @@
 
   // Image URL preview
   document.getElementById('content-image').addEventListener('input', (e)=>{
-    const url = e.target.value.trim();
+    const url = e.target.value?.trim();
     const preview = document.getElementById('image-preview');
     const img = document.getElementById('preview-img');
     
-    if (url){
+    if (url && url.length > 0){
+      // Only show preview for valid URL strings
       img.src = url;
       preview.classList.add('active');
       img.onerror = () => {
         img.src = 'https://via.placeholder.com/600x400/1A1A2E/E63946?text=Invalid+URL';
       };
+      // Reset error handler on successful load
+      img.onload = () => {
+        img.onerror = () => {
+          img.src = 'https://via.placeholder.com/600x400/1A1A2E/E63946?text=Invalid+URL';
+        };
+      };
     } else {
       preview.classList.remove('active');
       img.src = '';
+      img.onerror = null;
+      img.onload = null;
     }
   });
 
