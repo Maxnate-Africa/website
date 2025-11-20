@@ -42,6 +42,18 @@ class ContentService {
     return this.filterContent(allProjects, filters);
   }
 
+  async getHero() {
+    return await this.fetchJSON('hero.json');
+  }
+
+  async getServices() {
+    return await this.fetchJSON('services.json') || [];
+  }
+
+  async getContact() {
+    return await this.fetchJSON('contact.json');
+  }
+
   filterContent(items, filters) {
     let filtered = items;
 

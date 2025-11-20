@@ -473,21 +473,90 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        // Render News
-        const newsGrid = document.querySelector('#news .news-grid');
-        if (newsGrid) {
-            // Show skeleton loaders
-            newsGrid.innerHTML = Array(3).fill(0).map(() => createNewsSkeleton()).join('');
-            
-            const news = await window.contentService.getNews({ 
-                website: 'maxnate', 
-                limit: 6 
-            });
-            if (news && news.length) {
-                newsGrid.innerHTML = news.map((n, idx) => {
-                    const dateTxt = n.date ? new Date(n.date).toLocaleDateString() : '';
-                    const hiddenClass = idx >= 3 ? ' hidden' : '';
-                    return `
+        // Render Hero Content
+        const heroTitle = document.querySelector('.hero-title');
+        const heroSubtitle = document.querySelector('.hero-subtitle');
+        const heroButtons = document.querySelector('.hero-buttons');
+        
+        if (heroTitle || heroSubtitle || heroButtons) {
+            const hero = await window.contentService.getHero();
+            if (hero) {
+                if (heroTitle) heroTitle.textContent = hero.title || heroTitle.textContent;
+                if (heroSubtitle) heroSubtitle.textContent = hero.subtitle || heroSubtitle.textContent;
+                
+                if (heroButtons && hero.buttons) {
+                    heroButtons.innerHTML = hero.buttons.map(btn => 
+                        `<a href="${btn.link}" class="btn btn-${btn.style}">${btn.text}</a>`
+                    ).join('');
+                }
+            }
+        }
+
+        // Render Services
+        const servicesGrid = document.querySelector('#services .services-grid');
+        if (servicesGrid) {
+            const services = await window.contentService.getServices();
+            if (services && services.length) {
+                servicesGrid.innerHTML = `
+                    <div class="service-card slide-in-up">
+                        <div class="service-icon"><i class="fas fa-cogs"></i></div>
+                        <h3>Complete Technology Solutions</h3>
+                        <p class="service-summary">${services.map(s => s.description).join('. ')}</p>
+                        <div class="service-pill-group">
+                            ${services.map(s => `<span class="service-pill"><i class="fas ${s.icon}"></i> ${s.name}</span>`).join('')}
+                        </div>
+                        <a href="#contact" class="service-link">Start Your Project →</a>
+                    </div>
+                `;
+            }
+        }
+
+        // Render Contact Info
+        const contact = await window.contentService.getContact();
+        if (contact) {
+            // Update contact info section
+            const contactInfo = document.querySelector('.contact-info');
+            if (contactInfo) {
+                const infoItem = contactInfo.querySelector('.info-item:nth-child(1) .info-content');
+                if (infoItem) {
+                    infoItem.innerHTML = `
+                        <h4>Headquarters</h4>
+                        <p>${contact.addressLine1}${contact.addressLine2 ? '<br>' + contact.addressLine2 : ''}<br>${contact.city}, ${contact.country}</p>
+                    `;
+                }
+                
+                const emailItem = contactInfo.querySelector('.info-item:nth-child(2) .info-content');
+                if (emailItem) {
+                    emailItem.innerHTML = `
+                        <h4>Email</h4>
+                        <p><a href="mailto:${contact.email}">${contact.email}</a></p>
+                    `;
+                }
+                
+                const phoneItem = contactInfo.querySelector('.info-item:nth-child(3) .info-content');
+                if (phoneItem) {
+                    phoneItem.innerHTML = `
+                        <h4>Phone</h4>
+                        <p>${contact.phone}</p>
+                        <p class="info-note">Mon-Fri: 8AM - 6PM EAT</p>
+                    `;
+                }
+                
+                const hoursItem = contactInfo.querySelector('.info-item:nth-child(4) .info-content');
+                if (hoursItem && contact.businessHours) {
+                    hoursItem.innerHTML = `
+                        <h4>Business Hours</h4>
+                        ${contact.businessHours.map(h => `<p>${h.days}: ${h.hours}</p>`).join('')}
+                    `;
+                }
+                
+                // Update map embed
+                const mapContainer = contactInfo.querySelector('.map-container iframe');
+                if (mapContainer && contact.mapUrl) {
+                    mapContainer.src = contact.mapUrl;
+                }
+            }
+        }
                     <article class=\"news-card${hiddenClass}\">
                       <div class=\"news-image\">
                         <img src=\"${n.image || 'assets/images/news/placeholder.jpg'}\" alt=\"${n.title}\" loading=\"lazy\">

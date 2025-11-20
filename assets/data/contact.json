@@ -1,0 +1,23 @@
+{
+  "email": "connect@maxnate.com",
+  "phone": "+255 746 662 612",
+  "addressLine1": "Kisesa, Mwanza",
+  "addressLine2": "",
+  "city": "Mwanza",
+  "country": "Tanzania, East Africa",
+  "businessHours": [
+    {
+      "days": "Monday - Friday",
+      "hours": "8:00 AM - 6:00 PM"
+    },
+    {
+      "days": "Saturday",
+      "hours": "9:00 AM - 2:00 PM"
+    },
+    {
+      "days": "Sunday",
+      "hours": "Closed"
+    }
+  ],
+  "mapUrl": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.924427739626!2d32.886124!3d-2.516767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x183f1f0b07c70b39%3A0x12d0c2f96d2d0d1b!2sMwanza%2C%20Tanzania!5e0!3m2!1sen!2sus!4v1708860000000!5m2!1sen!2sus"
+}

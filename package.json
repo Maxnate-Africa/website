@@ -9,9 +9,9 @@
     "dev": "npm run build:content && npx http-server -p 8080"
   },
   "dependencies": {
-    "gray-matter": "^4.0.3"
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.1"
   },
-  "devDependencies": {},
   "engines": {
     "node": ">=16"
   }

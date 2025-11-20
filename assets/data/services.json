@@ -1,0 +1,50 @@
+[
+  {
+    "id": "custom-apps",
+    "name": "Custom Apps",
+    "icon": "fa-code",
+    "description": "End-to-end custom software development tailored to your business needs",
+    "order": 1,
+    "status": "active"
+  },
+  {
+    "id": "web-ux",
+    "name": "Web & UX",
+    "icon": "fa-laptop-code",
+    "description": "Modern web applications with exceptional user experience design",
+    "order": 2,
+    "status": "active"
+  },
+  {
+    "id": "cloud-hosting",
+    "name": "Cloud & Hosting",
+    "icon": "fa-cloud",
+    "description": "Enterprise-grade cloud infrastructure and reliable hosting solutions",
+    "order": 3,
+    "status": "active"
+  },
+  {
+    "id": "digital-strategy",
+    "name": "Digital Strategy",
+    "icon": "fa-rocket",
+    "description": "Strategic digital transformation consulting and implementation",
+    "order": 4,
+    "status": "active"
+  },
+  {
+    "id": "agritech",
+    "name": "AgriTech",
+    "icon": "fa-seedling",
+    "description": "Innovative technology solutions for modern agriculture in Africa",
+    "order": 5,
+    "status": "active"
+  },
+  {
+    "id": "support",
+    "name": "24/7 Support",
+    "icon": "fa-tools",
+    "description": "Round-the-clock technical support and maintenance services",
+    "order": 6,
+    "status": "active"
+  }
+]
