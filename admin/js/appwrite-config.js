@@ -8,5 +8,6 @@ window.APPWRITE_ADMIN = {
   projectsCollectionId: "projects",
   newsCollectionId: "news",
   bucketId: "uploads",
-  adminsTeamId: "691ebb420001973a90a4" // Fill this after creating the admin team
+  adminsTeamId: "691ebb420001973a90a4", // CMS Admins team - super admins with full access
+  userWebsiteAccessCollectionId: "user_website_access" // For multi-tenant access control
 };

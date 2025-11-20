@@ -29,6 +29,8 @@
   let currentContentType = 'projects';
   let currentStatusFilter = 'all';
   let availableWebsites = [];
+  let allUsers = [];
+  let isSuperAdmin = false;
   let currentContent = [];
   let selectedIds = new Set();
   let isEditMode = false;
@@ -62,6 +64,10 @@
     websites: {
       title: 'Manage Websites',
       singular: 'Website'
+    },
+    users: {
+      title: 'Manage Users & Access',
+      singular: 'User'
     }
   };
 
@@ -83,9 +89,11 @@
       // Check if user is member of the admins team
       const teamsList = await teams.list();
       const userTeams = teamsList.teams || [];
-      return userTeams.some(t => t.$id === cfg.adminsTeamId);
+      isSuperAdmin = userTeams.some(t => t.$id === cfg.adminsTeamId);
+      return isSuperAdmin;
     } catch (e){
       console.warn('Unable to check team memberships', e);
+      isSuperAdmin = false;
       return false;
     }
   }
@@ -180,6 +188,8 @@
     if (config){
       if (section === 'websites') {
         loadWebsitesSection();
+      } else if (section === 'users') {
+        loadUsersSection();
       } else {
         currentStatusFilter = 'all';
         ensureStatusFilters();
@@ -195,8 +205,37 @@
   async function loadWebsites(){
     try {
       const res = await databases.listDocuments(cfg.databaseId, cfg.websitesCollectionId, [Query.orderAsc('name')]);
-      availableWebsites = (res.documents||[]).map(d => ({ id: d.slug || d.$id, name: d.name || d.$id }));
-      if (!availableWebsites.length) { await createDefaultWebsite(); return loadWebsites(); }
+      const allWebsites = (res.documents||[]).map(d => ({ id: d.slug || d.$id, name: d.name || d.$id }));
+      
+      // Filter websites based on user access
+      if (isSuperAdmin) {
+        // Super admins see all websites
+        availableWebsites = allWebsites;
+      } else {
+        // Regular users only see websites they have access to
+        try {
+          const accessRes = await databases.listDocuments(
+            cfg.databaseId, 
+            cfg.userWebsiteAccessCollectionId, 
+            [Query.equal('userId', currentUser.$id)]
+          );
+          const allowedWebsiteIds = (accessRes.documents || []).map(d => d.websiteId);
+          availableWebsites = allWebsites.filter(w => allowedWebsiteIds.includes(w.id));
+        } catch (err) {
+          console.warn('Could not load user website access', err);
+          // If collection doesn't exist yet, show no websites for non-admins
+          availableWebsites = [];
+        }
+      }
+      
+      if (!availableWebsites.length) { 
+        if (!isSuperAdmin) {
+          alert('You do not have access to any websites. Please contact an administrator.');
+          return;
+        }
+        await createDefaultWebsite(); 
+        return loadWebsites(); 
+      }
       const stored = localStorage.getItem(WEBSITE_STORAGE_KEY);
       const hasStored = stored && availableWebsites.some(w => w.id === stored);
       currentWebsite = hasStored ? stored : (availableWebsites.find(w=>w.id==='maxnate')?.id || availableWebsites[0].id);
@@ -339,6 +378,179 @@
     } catch(err){
       console.error('delete website error', err);
       alert('Failed to delete website.');
+    }
+  }
+
+  // Users Section Management
+  async function loadUsersSection(){
+    if (!isSuperAdmin) {
+      const listEl = document.getElementById('users-list');
+      listEl.innerHTML = '<p style="text-align:center; color:#DC3545; padding:3rem;">Only super admins can manage users.</p>';
+      return;
+    }
+    
+    const listEl = document.getElementById('users-list');
+    listEl.innerHTML = '<p style="text-align:center; padding:2rem; color:#6C757D;">Loading users...</p>';
+    
+    try {
+      // Load all users from Auth
+      const usersRes = await account.listSessions(); // This won't work, we need different approach
+      // Note: Appwrite doesn't have a way to list all users from client SDK
+      // We'll load from user_website_access collection instead
+      const accessRes = await databases.listDocuments(cfg.databaseId, cfg.userWebsiteAccessCollectionId, [Query.limit(100)]);
+      const accessDocs = accessRes.documents || [];
+      
+      // Group by user
+      const userMap = new Map();
+      accessDocs.forEach(doc => {
+        if (!userMap.has(doc.userId)) {
+          userMap.set(doc.userId, {
+            userId: doc.userId,
+            userEmail: doc.userEmail,
+            websites: []
+          });
+        }
+        userMap.get(doc.userId).websites.push(doc.websiteId);
+      });
+      
+      allUsers = Array.from(userMap.values());
+      
+      listEl.innerHTML = '';
+      if (!allUsers.length){
+        listEl.innerHTML = '<p style="text-align:center; color:#6C757D; padding:3rem;">No users with website access yet. Use the button below to grant access.</p>';
+      } else {
+        allUsers.forEach(user => listEl.appendChild(createUserCard(user)));
+      }
+      
+      // Add "Grant Access" button
+      const sectionEl = document.getElementById('users-section');
+      let addBtn = sectionEl.querySelector('.grant-access-btn');
+      if (!addBtn){
+        addBtn = document.createElement('button');
+        addBtn.className = 'btn-primary grant-access-btn';
+        addBtn.textContent = '+ Grant Website Access';
+        addBtn.style.cssText = 'margin: 0 var(--spacing-xl) var(--spacing-md); max-width: 220px;';
+        addBtn.addEventListener('click', ()=> showGrantAccessModal());
+        sectionEl.insertBefore(addBtn, listEl);
+      }
+    } catch(err){
+      console.error('loadUsersSection error', err);
+      listEl.innerHTML = '<p style="text-align:center; color:#DC3545; padding:3rem;">Failed to load users. Make sure user_website_access collection exists.</p>';
+    }
+  }
+
+  function createUserCard(user){
+    const card = document.createElement('div');
+    card.className = 'content-item';
+    
+    const websitesHTML = user.websites.map(wId => {
+      const website = availableWebsites.find(w => w.id === wId);
+      return `<span>${website ? website.name : wId}</span>`;
+    }).join('');
+    
+    card.innerHTML = `
+      <div class="content-item-content">
+        <h3>${user.userEmail}</h3>
+        <p><strong>User ID:</strong> <code style="font-size:0.8em;">${user.userId}</code></p>
+        <div class="content-meta">
+          ${websitesHTML || '<span>No websites assigned</span>'}
+        </div>
+        <div class="content-actions">
+          <button class="btn-edit" data-action="edit-access">Manage Access</button>
+          <button class="btn-delete" data-action="revoke-all">Revoke All</button>
+        </div>
+      </div>`;
+    
+    card.querySelector('[data-action="edit-access"]').addEventListener('click', ()=> showGrantAccessModal(user));
+    card.querySelector('[data-action="revoke-all"]').addEventListener('click', ()=> revokeAllAccess(user.userId));
+    return card;
+  }
+
+  async function showGrantAccessModal(user = null){
+    const userEmail = user ? user.userEmail : prompt('Enter user email:');
+    if (!userEmail) return;
+    
+    // Get user ID from email (we need to query the access collection or ask admin to input both)
+    let userId = user ? user.userId : prompt(`Enter User ID for ${userEmail}:\n\n(Find this in Appwrite Console > Auth > Users)`);
+    if (!userId) return;
+    
+    // Show website selection
+    const websiteOptions = availableWebsites.map(w => 
+      `<label style="display:block; margin:0.5rem 0;"><input type="checkbox" value="${w.id}" ${user && user.websites.includes(w.id) ? 'checked' : ''}> ${w.name}</label>`
+    ).join('');
+    
+    const container = document.createElement('div');
+    container.style.cssText = 'position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.6); display:flex; align-items:center; justify-content:center; z-index:9999;';
+    container.innerHTML = `
+      <div style="background:white; padding:2rem; border-radius:12px; max-width:500px; width:90%;">
+        <h3>Grant Website Access</h3>
+        <p><strong>User:</strong> ${userEmail}</p>
+        <div style="margin:1rem 0; max-height:300px; overflow-y:auto;">
+          ${websiteOptions}
+        </div>
+        <div style="display:flex; gap:1rem; margin-top:1.5rem;">
+          <button id="save-access-btn" class="btn-primary" style="flex:1;">Save Access</button>
+          <button id="cancel-access-btn" class="btn-secondary" style="flex:1;">Cancel</button>
+        </div>
+      </div>`;
+    
+    document.body.appendChild(container);
+    
+    container.querySelector('#cancel-access-btn').addEventListener('click', () => document.body.removeChild(container));
+    container.querySelector('#save-access-btn').addEventListener('click', async () => {
+      const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+      const selectedWebsites = Array.from(checkboxes).filter(cb => cb.checked).map(cb => cb.value);
+      
+      try {
+        // Delete existing access for this user
+        if (user) {
+          const existingRes = await databases.listDocuments(cfg.databaseId, cfg.userWebsiteAccessCollectionId, [Query.equal('userId', userId)]);
+          for (const doc of existingRes.documents) {
+            await databases.deleteDocument(cfg.databaseId, cfg.userWebsiteAccessCollectionId, doc.$id);
+          }
+        }
+        
+        // Create new access documents
+        const perms = cfg.adminsTeamId ? [
+          Permission.read(Role.user(userId)),
+          Permission.update(Role.team(cfg.adminsTeamId)),
+          Permission.delete(Role.team(cfg.adminsTeamId)),
+          Permission.write(Role.team(cfg.adminsTeamId))
+        ] : [Permission.read(Role.user(userId))];
+        
+        for (const websiteId of selectedWebsites) {
+          await databases.createDocument(cfg.databaseId, cfg.userWebsiteAccessCollectionId, 'unique()', {
+            userId: userId,
+            userEmail: userEmail,
+            websiteId: websiteId,
+            role: 'editor',
+            createdAt: new Date().toISOString(),
+            createdBy: currentUser.email
+          }, perms);
+        }
+        
+        document.body.removeChild(container);
+        await loadUsersSection();
+        alert(`Access updated for ${userEmail}`);
+      } catch(err){
+        console.error('grant access error', err);
+        alert('Failed to update access: ' + (err.message || 'Unknown error'));
+      }
+    });
+  }
+
+  async function revokeAllAccess(userId){
+    if (!confirm('Revoke all website access for this user?')) return;
+    try {
+      const res = await databases.listDocuments(cfg.databaseId, cfg.userWebsiteAccessCollectionId, [Query.equal('userId', userId)]);
+      for (const doc of res.documents) {
+        await databases.deleteDocument(cfg.databaseId, cfg.userWebsiteAccessCollectionId, doc.$id);
+      }
+      await loadUsersSection();
+      alert('All access revoked.');
+    } catch(err){
+      console.error('revoke access error', err);
+      alert('Failed to revoke access.');
     }
   }
 

@@ -158,14 +158,46 @@ Complete guide to configure your Appwrite backend for Maxnate Africa website.
    - Enter email addresses of admin users
    - They'll receive invitations to join
 
-## Step 6: Update Admin Config with Team ID
+## Step 6: Create User-Website Access Collection (Multi-Tenant Support)
+
+This collection allows you to assign specific websites to users, enabling you to manage multiple client websites with different users having access to only their assigned sites.
+
+**Collection Settings:**
+- Collection ID: `user_website_access`
+- Name: `User Website Access`
+- Permissions:
+  - Read: `Users` (authenticated users can read their own access)
+  - Create: `Team:admins` (only admins can assign access)
+  - Update: `Team:admins`
+  - Delete: `Team:admins`
+
+**Attributes:**
+```
+- userId (string, 100, required) - User's Appwrite user ID
+- userEmail (string, 200, required) - For easy reference
+- websiteId (string, 100, required) - Website slug
+- role (string, 50, default: "editor") - "editor" or "viewer"
+- createdAt (datetime, required)
+- createdBy (string, 100) - Admin who granted access
+```
+
+**Indexes:**
+- `user_website` on `userId` and `websiteId` (unique)
+- `user_idx` on `userId`
+
+**Special Users:**
+- Users who are members of the `CMS Admins` team are **Super Admins** and automatically have access to ALL websites
+- Other users only see websites they've been explicitly granted access to
+
+## Step 7: Update Admin Config with Team ID
 
 After creating the team, copy its ID and update:
 
 **File:** `admin/js/appwrite-config.js`
 
 ```javascript
-adminsTeamId: "YOUR_TEAM_ID_HERE"
+adminsTeamId: "YOUR_TEAM_ID_HERE",
+userWebsiteAccessCollectionId: "user_website_access"
 ```
 
 Then commit and push:
@@ -175,7 +207,7 @@ git commit -m "Add Appwrite admin team ID"
 git push
 ```
 
-## Step 7: Test the Setup
+## Step 8: Test the Setup
 
 ### Test Public Website
 1. Visit: https://maxnate-africa.github.io/website/
