@@ -8,5 +8,5 @@ window.APPWRITE_ADMIN = {
   projectsCollectionId: "projects",
   newsCollectionId: "news",
   bucketId: "uploads",
-  adminsTeamId: "" // Fill this after creating the admin team
+  adminsTeamId: "691ebb420001973a90a4" // Fill this after creating the admin team
 };

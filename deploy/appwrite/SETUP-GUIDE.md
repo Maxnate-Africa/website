@@ -6,24 +6,19 @@ Complete guide to configure your Appwrite backend for Maxnate Africa website.
 
 - Appwrite Cloud account
 - Project ID: `691de2b2000699d6898f`
-- Console URL: https://cloud.appwrite.io/console/project-691de2b2000699d6898f
+- Console URL: <https://cloud.appwrite.io/console>
 
 ## Step 1: Add Platform URLs (CORS)
 
-1. Go to **Settings** → **Platforms** → **Add Platform** → **Web App**
-2. Add these three platforms:
+**Note:** You are looking for the **"Platforms"** section, not "Custom Domains".
 
-   **Platform 1: GitHub Pages (Public Website)**
-   - Name: `Maxnate Website`
-   - Hostname: `maxnate-africa.github.io`
-
-   **Platform 2: Vercel (Admin CMS)**
-   - Name: `Admin CMS`
-   - Hostname: `website-orpin-omega-56.vercel.app`
-
-   **Platform 3: Local Development**
-   - Name: `Local Dev`
-   - Hostname: `localhost` or `127.0.0.1`
+1. Go to <https://cloud.appwrite.io/console>
+2. Select your project (Maxnate Africa)
+3. Click on **"Overview"** in the left sidebar (the top item)
+4. Look for the **"Platforms"** section on the main dashboard page
+5. Click the **"Add Platform"** button
+6. Select **"Web"** (if asked for a framework, choose **"Web"**, **"HTML"**, or **"Vanilla JS"**)
+7. Add these three platforms (you'll need to do this 3 times):
 
 ## Step 2: Create Database
 
@@ -255,6 +250,6 @@ You can add sample data via the Appwrite Console:
 
 ## Support
 
-- Appwrite Docs: https://appwrite.io/docs
-- Appwrite Discord: https://appwrite.io/discord
-- Project Console: https://cloud.appwrite.io/console/project-691de2b2000699d6898f
+- Appwrite Docs: <https://appwrite.io/docs>
+- Appwrite Discord: <https://appwrite.io/discord>
+- Project Console: <https://cloud.appwrite.io/console>
