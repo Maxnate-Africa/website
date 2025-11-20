@@ -657,7 +657,23 @@
     if (item.date) document.getElementById('news-date').value = item.date.split('T')[0];
     if (item.linkText) document.getElementById('news-link-text').value = item.linkText;
     if (item.category && currentContentType==='news') document.getElementById('news-category').value = item.category;
-    if (item.image) { document.getElementById('content-image').value = item.image; const preview = document.getElementById('image-preview'); document.getElementById('preview-img').src = item.image; preview.classList.add('active'); }
+    
+    // Handle image preview
+    if (item.image) {
+      const imageInput = document.getElementById('content-image');
+      const preview = document.getElementById('image-preview');
+      const img = document.getElementById('preview-img');
+      
+      imageInput.value = item.image;
+      img.src = item.image;
+      preview.classList.add('active');
+      
+      // Handle broken images
+      img.onerror = () => {
+        img.src = 'https://via.placeholder.com/600x400/1A1A2E/E63946?text=Image+Not+Found';
+      };
+    }
+    
     updateConditionalFields();
     contentModal.classList.add('active');
   }
@@ -783,8 +799,20 @@
 
   // Image URL preview
   document.getElementById('content-image').addEventListener('input', (e)=>{
-    const url = e.target.value; const preview = document.getElementById('image-preview'); const img = document.getElementById('preview-img');
-    if (url){ img.src=url; preview.classList.add('active'); img.onerror=()=>{img.src='https://via.placeholder.com/600x400/1A1A2E/E63946?text=Invalid+URL'}; }
+    const url = e.target.value.trim();
+    const preview = document.getElementById('image-preview');
+    const img = document.getElementById('preview-img');
+    
+    if (url){
+      img.src = url;
+      preview.classList.add('active');
+      img.onerror = () => {
+        img.src = 'https://via.placeholder.com/600x400/1A1A2E/E63946?text=Invalid+URL';
+      };
+    } else {
+      preview.classList.remove('active');
+      img.src = '';
+    }
   });
 
   // File Upload
