@@ -84,6 +84,15 @@
                     <span>News & Events</span>
                 </a>
                 
+                <a href="#" class="nav-item" data-section="websites">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <span>Websites</span>
+                </a>
+                
                 <div class="nav-divider"></div>
                 
                 <a href="#" class="nav-item" data-section="settings">
@@ -125,6 +134,16 @@
             <!-- News & Events Section -->
             <section id="news-section" class="content-section">
                 <div id="news-list" class="content-grid"></div>
+            </section>
+
+            <!-- Websites Section -->
+            <section id="websites-section" class="content-section">
+                <div id="websites-list" class="content-grid"></div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="websites-section" class="content-section">
+                <div id="websites-list" class="content-grid"></div>
             </section>
 
             <!-- Settings Section -->
@@ -219,6 +238,34 @@
                 <div class="form-group conditional-field" data-show-for="news">
                     <label for="news-link-text">Link Button Text</label>
                     <input type="text" id="news-link-text" name="linkText" placeholder="e.g., Learn More, Read More" value="Learn More →">
+                </div>
+
+                <!-- Website-specific fields -->
+                <div class="form-group conditional-field" data-show-for="websites">
+                    <label for="website-slug">Slug (URL identifier) *</label>
+                    <input type="text" id="website-slug" name="slug" placeholder="e.g., maxnate, client-name" pattern="[a-z0-9-]+">
+                    <small>Lowercase letters, numbers, and hyphens only</small>
+                </div>
+
+                <div class="form-group conditional-field" data-show-for="websites">
+                    <label for="website-name">Website Name *</label>
+                    <input type="text" id="website-name" name="name" placeholder="e.g., Maxnate Africa">
+                </div>
+
+                <div class="form-group conditional-field" data-show-for="websites">
+                    <label for="website-domain">Domain (optional)</label>
+                    <input type="text" id="website-domain" name="domain" placeholder="e.g., maxnate.com">
+                </div>
+
+                <div class="form-group conditional-field" data-show-for="websites">
+                    <label for="website-theme">Theme Color</label>
+                    <select id="website-theme" name="theme">
+                        <option value="teal">Teal</option>
+                        <option value="blue">Blue</option>
+                        <option value="red">Red</option>
+                        <option value="purple">Purple</option>
+                        <option value="green">Green</option>
+                    </select>
                 </div>
 
                 <!-- Common fields -->

@@ -58,6 +58,10 @@
     news: {
       title: 'Manage News & Events',
       singular: 'News/Event'
+    },
+    websites: {
+      title: 'Manage Websites',
+      singular: 'Website'
     }
   };
 
@@ -174,12 +178,16 @@
     const config = CONTENT_TYPES[section];
     document.getElementById('section-title').textContent = config ? config.title : 'Settings';
     if (config){
-      currentStatusFilter = 'all';
-      ensureStatusFilters();
-      selectedIds = new Set();
-      ensureBulkToolbar();
-      ensureWebsiteSwitcher();
-      syncWebsiteUI();
+      if (section === 'websites') {
+        loadWebsitesSection();
+      } else {
+        currentStatusFilter = 'all';
+        ensureStatusFilters();
+        selectedIds = new Set();
+        ensureBulkToolbar();
+        ensureWebsiteSwitcher();
+        syncWebsiteUI();
+      }
     }
   }
 
@@ -231,6 +239,106 @@
       updateStatusCounts();
       renderContent();
       updateBulkToolbar();
+    }
+  }
+
+  // Websites Section Management
+  async function loadWebsitesSection(){
+    const listEl = document.getElementById('websites-list');
+    listEl.innerHTML = '<p style="text-align:center; padding:2rem; color:#6C757D;">Loading websites...</p>';
+    
+    // Add "Add Website" button at the top
+    const sectionEl = document.getElementById('websites-section');
+    let addBtn = sectionEl.querySelector('.add-website-btn');
+    if (!addBtn){
+      addBtn = document.createElement('button');
+      addBtn.className = 'btn-primary add-website-btn';
+      addBtn.textContent = '+ Add New Website';
+      addBtn.style.cssText = 'margin: 0 var(--spacing-xl) var(--spacing-md); max-width: 200px;';
+      addBtn.addEventListener('click', ()=> openWebsiteModal());
+      sectionEl.insertBefore(addBtn, listEl);
+    }
+    
+    try {
+      const res = await databases.listDocuments(cfg.databaseId, cfg.websitesCollectionId, [Query.orderAsc('name')]);
+      const websites = res.documents || [];
+      listEl.innerHTML = '';
+      if (!websites.length){
+        listEl.innerHTML = '<p style="text-align:center; color:#6C757D; padding:3rem;">No websites yet. Click "Add New Website" to get started!</p>';
+        return;
+      }
+      websites.forEach(site => listEl.appendChild(createWebsiteCard(site)));
+    } catch(err){
+      console.error('loadWebsitesSection error', err);
+      listEl.innerHTML = '<p style="text-align:center; color:#DC3545; padding:3rem;">Failed to load websites.</p>';
+    }
+  }
+
+  function createWebsiteCard(site){
+    const card = document.createElement('div');
+    card.className = 'content-item';
+    const settings = site.settings || {};
+    const theme = settings.theme || 'teal';
+    const domain = site.domain || 'No domain set';
+    
+    card.innerHTML = `
+      <div class="content-item-content">
+        <h3>${site.name || site.slug}</h3>
+        <p><strong>Slug:</strong> ${site.slug}</p>
+        <p><strong>Domain:</strong> ${domain}</p>
+        <div class="content-meta">
+          <span>Theme: ${theme}</span>
+          <span>Created: ${new Date(site.createdAt || site.$createdAt).toLocaleDateString()}</span>
+        </div>
+        <div class="content-actions">
+          <button class="btn-edit" data-action="edit-website">Edit</button>
+          <button class="btn-delete" data-action="delete-website">Delete</button>
+        </div>
+      </div>`;
+    
+    card.querySelector('[data-action="edit-website"]').addEventListener('click', ()=> editWebsite(site));
+    card.querySelector('[data-action="delete-website"]').addEventListener('click', ()=> deleteWebsite(site.$id));
+    return card;
+  }
+
+  function openWebsiteModal(site = null){
+    isEditMode = !!site;
+    editingContentId = site ? site.$id : null;
+    
+    document.getElementById('modal-title').textContent = site ? 'Edit Website' : 'Add New Website';
+    document.getElementById('content-type').value = 'websites';
+    document.getElementById('content-id').value = site ? site.$id : '';
+    
+    // Populate fields
+    document.getElementById('website-slug').value = site?.slug || '';
+    document.getElementById('website-slug').disabled = !!site; // Can't change slug after creation
+    document.getElementById('website-name').value = site?.name || '';
+    document.getElementById('website-domain').value = site?.domain || '';
+    document.getElementById('website-theme').value = site?.settings?.theme || 'teal';
+    
+    // Hide project/news fields, show website fields
+    updateConditionalFields();
+    
+    // Hide image upload for websites
+    const imageGroup = document.querySelector('.form-group:has(#content-image)');
+    if (imageGroup) imageGroup.style.display = 'none';
+    
+    contentModal.classList.add('active');
+  }
+
+  async function editWebsite(site){
+    openWebsiteModal(site);
+  }
+
+  async function deleteWebsite(id){
+    if (!confirm('Delete this website? This will NOT delete its content, but you will need to reassign content to another website.')) return;
+    try {
+      await databases.deleteDocument(cfg.databaseId, cfg.websitesCollectionId, id);
+      await loadWebsitesSection();
+      await loadWebsites(); // Refresh dropdown
+    } catch(err){
+      console.error('delete website error', err);
+      alert('Failed to delete website.');
     }
   }
 
@@ -340,6 +448,49 @@
   // Save
   contentForm.addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    // Handle Website save
+    if (currentContentType === 'websites' || document.getElementById('content-type').value === 'websites'){
+      const websiteData = {
+        slug: document.getElementById('website-slug').value.toLowerCase().trim(),
+        name: document.getElementById('website-name').value.trim(),
+        domain: document.getElementById('website-domain').value.trim(),
+        settings: {
+          theme: document.getElementById('website-theme').value,
+          primaryColor: getThemeColor(document.getElementById('website-theme').value)
+        }
+      };
+      
+      if (!isEditMode) {
+        websiteData.createdAt = new Date().toISOString();
+      }
+      websiteData.updatedAt = new Date().toISOString();
+      
+      const perms = cfg.adminsTeamId ? [
+        Permission.read(Role.any()),
+        Permission.update(Role.team(cfg.adminsTeamId)),
+        Permission.delete(Role.team(cfg.adminsTeamId)),
+        Permission.write(Role.team(cfg.adminsTeamId))
+      ] : [Permission.read(Role.any())];
+      
+      try {
+        if (isEditMode){
+          await databases.updateDocument(cfg.databaseId, cfg.websitesCollectionId, editingContentId, websiteData, perms);
+        } else {
+          await databases.createDocument(cfg.databaseId, cfg.websitesCollectionId, 'unique()', websiteData, perms);
+        }
+        closeModal();
+        await loadWebsitesSection();
+        await loadWebsites(); // Refresh dropdown
+        return;
+      } catch(err){
+        console.error('save website error', err);
+        alert('Failed to save website: ' + (err.message || 'Unknown error'));
+        return;
+      }
+    }
+    
+    // Original content save logic
     const contentData = {
       title: document.getElementById('content-title').value,
       description: document.getElementById('content-description').value,
@@ -382,6 +533,17 @@
       await loadContent();
     } catch(err){ console.error('save error', err); alert('Failed to save.'); }
   });
+
+  function getThemeColor(theme){
+    const colors = {
+      teal: '#008080',
+      blue: '#0066CC',
+      red: '#E63946',
+      purple: '#6A4C93',
+      green: '#2A9D8F'
+    };
+    return colors[theme] || '#008080';
+  }
 
   // Conditional fields
   function updateConditionalFields(){
@@ -543,7 +705,16 @@
   // Modal
   closeModalBtn.addEventListener('click', closeModal);
   cancelBtn.addEventListener('click', closeModal);
-  function closeModal(){ contentModal.classList.remove('active'); contentForm.reset(); document.getElementById('image-preview').classList.remove('active'); }
+  function closeModal(){ 
+    contentModal.classList.remove('active'); 
+    contentForm.reset(); 
+    document.getElementById('image-preview').classList.remove('active');
+    // Re-enable slug field and show image upload
+    const slugField = document.getElementById('website-slug');
+    if (slugField) slugField.disabled = false;
+    const imageGroup = document.querySelector('.form-group:has(#content-image)');
+    if (imageGroup) imageGroup.style.display = '';
+  }
   contentModal.addEventListener('click', (e)=>{ if (e.target===contentModal) closeModal(); });
 
   // Filters/toolbar/website switcher (minimal reuse of DOM API)
