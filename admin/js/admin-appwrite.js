@@ -233,8 +233,9 @@
           alert('You do not have access to any websites. Please contact an administrator.');
           return;
         }
-        await createDefaultWebsite(); 
-        return loadWebsites(); 
+        // Don't auto-create - let user create manually via UI
+        alert('No websites found. Please create one using the "Websites" section.');
+        return;
       }
       const stored = localStorage.getItem(WEBSITE_STORAGE_KEY);
       const hasStored = stored && availableWebsites.some(w => w.id === stored);
@@ -249,27 +250,8 @@
   }
 
   async function createDefaultWebsite(){
-    try {
-      const perms = cfg.adminsTeamId ? [
-        Permission.read(Role.any()),
-        Permission.update(Role.team(cfg.adminsTeamId)),
-        Permission.delete(Role.team(cfg.adminsTeamId)),
-        Permission.write(Role.team(cfg.adminsTeamId))
-      ] : [Permission.read(Role.any())];
-      
-      await databases.createDocument(cfg.databaseId, cfg.websitesCollectionId, 'unique()', {
-        slug: 'maxnate',
-        name: 'Maxnate Africa',
-        domain: 'maxnate.com',
-        url: 'https://maxnate.com',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        settings: { theme: 'teal', primaryColor: '#008080' }
-      }, perms);
-    } catch(err){ 
-      console.error('createDefaultWebsite error', err);
-      // If it fails, the collection might have different schema - user needs to create manually
-    }
+    // Deprecated - users should create websites via the Websites section UI
+    console.warn('createDefaultWebsite is deprecated. Use the Websites section to create websites.');
   }
 
   // Content CRUD
