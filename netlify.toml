@@ -1,15 +1,25 @@
 [build]
+  # Build both content data and (optionally) any future bundling steps.
+  # Adjust to `npm run build` if you later introduce a full build pipeline.
   command = "npm run build:content"
   publish = "."
-  ignore = "git diff --quiet HEAD^ HEAD -- cms-admin/ content/"
+  # Optional: ignore builds unless content or CMS changes; disable if you want every commit built.
+  ignore = "git diff --quiet HEAD^ HEAD -- cms-admin/ content/ assets/js/ scripts/"
 
 # Only rebuild when CMS or content changes
 # GitHub Pages handles public site deployment
 
 [[redirects]]
-  from = "/*"
+  from = "/cms-admin/*"
   to = "/cms-admin/index.html"
   status = 200
+  force = true
+
+# Optional: protect CMS from indexing
+[[headers]]
+  for = "/cms-admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
 
 [[redirects]]
   from = "/offers"

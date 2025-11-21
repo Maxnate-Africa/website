@@ -9,11 +9,13 @@
 2. Click "Add new site" → "Import an existing project"
 3. Connect to GitHub: `Maxnate-Africa/website`
 4. Build settings are auto-detected from `netlify.toml`:
-   - **Build command**: `npm run build`
-   - **Publish directory**: `.` (root)
+
+   - **Build command**: `npm run build:content` (adjust to `npm run build` if you add bundling)
+   - **Publish directory**: `.` (root — static HTML + generated JSON)
 5. Click "Deploy site"
 
-**Option B: Via Netlify CLI**
+### Option B: Via Netlify CLI
+
 ```bash
 npm install -g netlify-cli
 netlify login
@@ -66,23 +68,32 @@ Once deployed, add your custom domain:
 ## Workflow
 
 ### Edit Content
-1. Visit `https://maxnate.com/cms-admin/`
-2. Login with Netlify Identity
-3. Create/edit news, projects, websites
-4. Click "Publish" → Commits to GitHub
+
+1. Visit `https://maxnate.com/cms-admin/`.
+2. Login with Netlify Identity.
+3. Create/edit news, projects, websites.
+4. Click "Publish" → commits to GitHub.
 
 ### Auto-Deploy
-1. CMS commits trigger Netlify build
-2. `npm run build` generates JSON
-3. Site updates in ~30 seconds
+
+1. Push or CMS publish commits to `main`.
+2. Netlify detects change and runs `npm run build:content`.
+3. Generated JSON written into `assets/data/*`.
+4. Deploy is published; CDN invalidated (~10–40s).
+5. If you introduce a bundler, switch build command and update `netlify.toml`.
+
+### Redirect Behavior
+
+The CMS is available only under `/cms-admin/` (see `netlify.toml`). Other routes serve the public site. This prevents accidental takeover of all paths by the admin interface.
 
 ### Local Development
+
 ```bash
 # Install dependencies
 npm install
 
 # Run local CMS backend
-npx decap-server
+npx decap-server   # optional local backend mock (if not using identity locally)
 
 # Visit admin
 http://localhost:3000/cms-admin/
@@ -91,28 +102,65 @@ http://localhost:3000/cms-admin/
 npm run build:content
 
 # Serve locally
-npx http-server -p 8080
+npx http-server -p 8080  # or any static server
+
+### Identity & Git Gateway Checklist
+
+| Step | Setting | Required |
+|------|---------|----------|
+| Enable Identity | Site Settings → Identity | Yes |
+| Registration Pref | Invite Only | Recommended |
+| Git Gateway | Identity → Services → Enable | Yes |
+| Invite Users | Identity → Invite | Yes |
+| Role-based Access | (Optional) Identity JWT roles | Optional |
+
+### Environment Variables (Optional Future Expansion)
+
+Add in Netlify UI → Site Settings → Build & Deploy → Environment:
+
+| Variable | Purpose |
+|----------|---------|
+| `FLOATING_OFFER_BEACON_URL` | Endpoint for offer event beacon logging |
+| `ANALYTICS_WRITE_KEY` | Future analytics integrations |
+| `API_BASE_URL` | External API integrations |
+
+### Hardening Recommendations
+
+- Add `X-Robots-Tag: noindex` header (already applied) for `/cms-admin/*`.
+- Enforce HTTPS (Netlify default).
+- Enable form spam protection if adding forms.
+- Consider Netlify Access (teams plan) for stricter admin gating.
+
+### Future Scaling
+
+- Move build to `npm run build` with asset optimization.
+- Add deploy previews for PR branches (Netlify auto-detects).
+- Introduce serverless functions (`netlify/functions/*`) for webhook/event logging.
 ```
 
 ## Troubleshooting
 
-**"Error loading config"**
-- Check `cms-admin/config.yml` syntax
-- Ensure `backend: name: git-gateway` is set
+### Error loading config
 
-**"Failed to load entries"**
-- Verify Git Gateway is enabled
-- Check user has admin/write access in Identity
+- Check `cms-admin/config.yml` syntax.
+- Ensure `backend: name: git-gateway` is set.
 
-**"Authentication failed"**
-- Disable browser extensions (ad blockers)
-- Clear cookies and try again
-- Check invitation email was accepted
+### Failed to load entries
 
-**Content not updating**
-- Check Netlify build logs
-- Verify `npm run build` succeeds
-- Look for errors in deploy log
+- Verify Git Gateway is enabled.
+- Check user has admin/write access in Identity.
+
+### Authentication failed
+
+- Disable browser extensions (ad blockers).
+- Clear cookies and try again.
+- Check invitation email was accepted.
+
+### Content not updating
+
+- Check Netlify build logs.
+- Verify `npm run build` succeeds.
+- Look for errors in deploy log.
 
 ## Benefits of Netlify + Decap CMS
 
@@ -127,6 +175,8 @@ npx http-server -p 8080
 
 ## Support
 
-- **Netlify Docs**: https://docs.netlify.com/
-- **Decap CMS Docs**: https://decapcms.org/docs/
-- **Community**: https://answers.netlify.com/
+Resources:
+
+- Netlify Docs: <https://docs.netlify.com/>
+- Decap CMS Docs: <https://decapcms.org/docs/>
+- Community: <https://answers.netlify.com/>
