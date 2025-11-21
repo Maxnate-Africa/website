@@ -124,14 +124,16 @@
       const nowIso = new Date().toISOString();
       const offerEntities = active.map(o => {
         const validThrough = o.expiry ? new Date(o.expiry).toISOString() : undefined;
+        const currency = o.priceCurrency || 'USD';
+        const priceVal = typeof o.price === 'number' ? o.price : (typeof o.value === 'number' ? o.value : 0);
         return {
           '@type': 'Offer',
           name: o.title,
           description: o.description || '',
           url: 'https://www.maxnate.com/offers',
           sku: o.id,
-          priceCurrency: 'USD',
-          price: typeof o.price === 'number' ? o.price : (typeof o.value === 'number' ? o.value : '0'),
+          priceCurrency: currency,
+          price: priceVal.toString(),
           availability: 'https://schema.org/InStock',
           validFrom: nowIso,
           ...(validThrough ? { validThrough } : {}),
@@ -144,13 +146,9 @@
         url: 'https://www.maxnate.com/offers',
         offerCount: offerEntities.length,
         offers: offerEntities,
-        lowPrice: offerEntities.reduce((min, o) => {
-          const p = parseFloat(o.price) || 0; return p < min ? p : min;
-        }, offerEntities[0] ? parseFloat(offerEntities[0].price)||0 : 0),
-        highPrice: offerEntities.reduce((max, o) => {
-          const p = parseFloat(o.price) || 0; return p > max ? p : max;
-        }, offerEntities[0] ? parseFloat(offerEntities[0].price)||0 : 0),
-        priceCurrency: 'USD'
+        lowPrice: offerEntities.reduce((min, o) => { const p = parseFloat(o.price) || 0; return p < min ? p : min; }, offerEntities[0] ? parseFloat(offerEntities[0].price)||0 : 0),
+        highPrice: offerEntities.reduce((max, o) => { const p = parseFloat(o.price) || 0; return p > max ? p : max; }, offerEntities[0] ? parseFloat(offerEntities[0].price)||0 : 0),
+        priceCurrency: offerEntities[0] ? offerEntities[0].priceCurrency : 'USD'
       };
       const script = document.createElement('script');
       script.type = 'application/ld+json';

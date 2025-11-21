@@ -5,7 +5,32 @@
   }
 
   let WHATSAPP_NUMBER = '255746662612';
-  let hasShownOffer = sessionStorage.getItem('offerShown');
+  // 24h suppression logic
+  const CLOSED_KEY = 'floatingOfferClosedAt';
+  const EVENTS_KEY = 'floatingOfferEvents';
+  const SUPPRESSION_MS = 24 * 60 * 60 * 1000;
+  const closedAt = localStorage.getItem(CLOSED_KEY);
+  const nowTs = Date.now();
+  const isSuppressed = closedAt && (nowTs - parseInt(closedAt, 10) < SUPPRESSION_MS);
+
+  function logOfferEvent(type, data = {}) {
+    try {
+      const payload = { type, ts: Date.now(), ...data };
+      const existing = JSON.parse(localStorage.getItem(EVENTS_KEY) || '[]');
+      existing.push(payload);
+      // keep last 100 events
+      const trimmed = existing.slice(-100);
+      localStorage.setItem(EVENTS_KEY, JSON.stringify(trimmed));
+      // Optional beacon endpoint (configure later)
+      if (window.navigator && navigator.sendBeacon && window.FLOATING_OFFER_BEACON_URL) {
+        try {
+          navigator.sendBeacon(window.FLOATING_OFFER_BEACON_URL, JSON.stringify(payload));
+        } catch (_) {}
+      }
+    } catch (e) {
+      console.warn('Offer event logging failed:', e);
+    }
+  }
   
   function generateOfferCode(id) {
     const date = new Date();
@@ -21,7 +46,7 @@
   }
   
   function createFloatingOffer(offer) {
-    if (!offer || hasShownOffer) return;
+    if (!offer || isSuppressed) return;
     
     const code = generateOfferCode(offer.id);
     const expiryTxt = offer.expiry ? new Date(offer.expiry).toLocaleDateString() : '';
@@ -54,17 +79,29 @@
     // Animations
     setTimeout(() => floatingOffer.classList.add('show'), 100);
     setTimeout(() => floatingOffer.classList.add('pulse'), 2000);
+    logOfferEvent('impression', { offerId: offer.id });
     
     // Event handlers
     floatingOffer.querySelector('.floating-offer-close').addEventListener('click', () => {
       floatingOffer.classList.remove('show');
       setTimeout(() => floatingOffer.remove(), 300);
-      sessionStorage.setItem('offerShown', 'true');
+      localStorage.setItem(CLOSED_KEY, Date.now().toString());
+      logOfferEvent('close', { offerId: offer.id });
     });
     
     floatingOffer.querySelector('.floating-offer-minimize').addEventListener('click', () => {
       floatingOffer.classList.toggle('minimized');
+      logOfferEvent('minimize', { offerId: offer.id, minimized: floatingOffer.classList.contains('minimized') });
     });
+
+    const claimLink = floatingOffer.querySelector('.floating-offer-claim');
+    claimLink.addEventListener('click', () => {
+      logOfferEvent('click_claim', { offerId: offer.id });
+    });
+    const viewAllLink = floatingOffer.querySelector('.floating-offer-viewall');
+    if (viewAllLink) {
+      viewAllLink.addEventListener('click', () => logOfferEvent('click_view_all', { offerId: offer.id }));
+    }
   }
   
   async function loadFloatingOffer() {
