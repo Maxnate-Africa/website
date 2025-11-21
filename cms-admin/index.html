@@ -83,6 +83,16 @@
         }
       });
     }
+    
+    // Debug: Log the actual structure after page loads
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        console.log('=== Debugging CMS Structure ===');
+        console.log('Identity widget:', document.querySelector('[class*="netlify-identity"]'));
+        console.log('Modal elements:', document.querySelectorAll('[class*="modal"]'));
+        console.log('All divs with classes:', Array.from(document.querySelectorAll('div[class]')).map(el => el.className));
+      }, 2000);
+    });
   </script>
 </body>
 </html>
