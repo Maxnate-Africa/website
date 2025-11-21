@@ -73,7 +73,15 @@ Your public site is already live at:
 - `https://maxnate-africa.github.io/website/`
 - Custom domain: `https://maxnate.com` (via CNAME)
 
-**No changes needed!**
+**If using automated build + hashing:** Enable workflow `.github/workflows/deploy-pages.yml` which:
+
+```yaml
+SKIP_ADMIN=1 npm run build
+```
+
+This excludes `cms-admin` from the public artifact to keep admin isolated on Netlify.
+
+If you need the CMS available under the same domain (NOT recommended for separation), remove `SKIP_ADMIN=1`.
 
 ### 2. Deploy CMS to Netlify
 
@@ -132,6 +140,44 @@ netlify deploy --prod
 ### 4. GitHub Actions Setup
 
 Create `.github/workflows/build-content.yml`:
+### 5. Dual Deployment Workflow
+
+| Layer | Build Command | Target | Includes CMS? | Notes |
+|-------|---------------|--------|---------------|-------|
+| GitHub Pages | `SKIP_ADMIN=1 npm run build` | gh-pages (managed by Deploy Pages action) | No | Fast static delivery, hashed assets |
+| Netlify CMS | `npm run build` (Netlify) | Netlify site | Yes | Identity + Git Gateway |
+
+### 6. Linking CMS from Public Site
+
+To avoid broken links, do **NOT** link to `/cms-admin/` on GitHub Pages. Instead provide a direct admin URL: `https://cms.maxnate.com/cms-admin/` to authorized users only (e.g. via email or internal docs). Keep hidden from public navigation to reduce crawl & attack surface.
+
+### 7. Environment Variable Options
+
+| Variable | Purpose | Where |
+|----------|---------|-------|
+| `SKIP_ADMIN=1` | Skip copying CMS admin for Pages build | GitHub Actions |
+| `BUILD_OUTPUT_DIR` | Content JSON output path | Content build script |
+| `ASSETS_ROOT` | Asset minification target | Minify script |
+
+### 8. Hardening Checklist
+
+- Ensure `robots.txt` disallows `/cms-admin/` (already configured in Netlify headers)
+- Use invite-only Netlify Identity
+- Rotate Identity tokens periodically
+- Monitor Netlify function logs for analytics anomalies
+- Set branch protection on `main` (require status checks, signed commits optional)
+
+### 9. Rollback Procedure
+
+GitHub Pages: revert commit or redeploy earlier SHA via `workflow_dispatch` → build artifact.
+
+Netlify CMS: revert repo state; Netlify will redeploy automatically on push.
+
+### 10. Future Enhancements
+
+- Add Lighthouse CI report in GitHub Actions
+- Add security headers (CSP, Permissions-Policy) via Netlify + GitHub Pages (using `_headers` file or meta tags)
+- Introduce delta content builds to reduce action minutes.
 
 ```yaml
 name: Build Content

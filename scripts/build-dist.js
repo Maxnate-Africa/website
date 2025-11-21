@@ -61,10 +61,14 @@ function copyStatic(){
     copyRecursive(assetsSrc, path.join(dist, 'assets'));
     log('Copied assets');
   }
-  // CMS Admin
-  if (fs.existsSync(adminSrc)) {
-    copyRecursive(adminSrc, path.join(dist, 'cms-admin'));
-    log('Copied cms-admin');
+  // CMS Admin (skip for GitHub Pages build when SKIP_ADMIN=1)
+  if (!process.env.SKIP_ADMIN) {
+    if (fs.existsSync(adminSrc)) {
+      copyRecursive(adminSrc, path.join(dist, 'cms-admin'));
+      log('Copied cms-admin');
+    }
+  } else {
+    log('Skipping cms-admin copy (SKIP_ADMIN=1)');
   }
 }
 
