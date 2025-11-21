@@ -445,7 +445,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             projectsGrid.innerHTML = Array(3).fill(0).map(() => createProjectSkeleton()).join('');
             
             const projects = await window.contentService.getProjects({ 
-                website: 'maxnate', 
                 limit: 6 
             });
             if (projects && projects.length) {
@@ -557,19 +556,32 @@ document.addEventListener('DOMContentLoaded', async function() {
                 }
             }
         }
-                    <article class=\"news-card${hiddenClass}\">
-                      <div class=\"news-image\">
-                        <img src=\"${n.image || 'assets/images/news/placeholder.jpg'}\" alt=\"${n.title}\" loading=\"lazy\">
-                        <div class=\"news-badge\">${n.badge || 'News'}</div>
+
+        // Render News
+        const newsGrid = document.querySelector('#news .news-grid');
+        if (newsGrid) {
+            // Show skeleton loaders
+            newsGrid.innerHTML = Array(3).fill(0).map(() => createNewsSkeleton()).join('');
+            
+            const news = await window.contentService.getNews({ limit: 6 });
+            if (news && news.length) {
+                newsGrid.innerHTML = news.map((n, idx) => {
+                    const hiddenClass = idx >= 3 ? ' hidden' : '';
+                    const dateTxt = n.date ? new Date(n.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+                    return `
+                    <article class="news-card${hiddenClass}">
+                      <div class="news-image">
+                        <img src="${n.image || 'assets/images/news/placeholder.jpg'}" alt="${n.title}" loading="lazy">
+                        <div class="news-badge">${n.badge || 'News'}</div>
                       </div>
-                      <div class=\"news-content\">
-                        <div class=\"news-meta\">
-                          <span class=\"news-date\"><i class=\"far fa-calendar\"></i> ${dateTxt}</span>
-                          <span class=\"news-category\">${n.category || ''}</span>
+                      <div class="news-content">
+                        <div class="news-meta">
+                          <span class="news-date"><i class="far fa-calendar"></i> ${dateTxt}</span>
+                          <span class="news-category">${n.category || ''}</span>
                         </div>
                         <h3>${n.title}</h3>
                         <p>${n.description || ''}</p>
-                        <a href=\"#contact\" class=\"news-link\">${n.linkText || 'Learn More →'}\u00A0</a>
+                        <a href="#contact" class="news-link">${n.linkText || 'Learn More →'} </a>
                       </div>
                     </article>`;
                 }).join('');
