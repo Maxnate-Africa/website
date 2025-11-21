@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /cms-admin/
+
+Sitemap: https://maxnate.com/sitemap.xml

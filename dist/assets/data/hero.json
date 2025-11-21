@@ -1,0 +1,23 @@
+{
+  "title": "Innovating for Smarter Future",
+  "subtitle": "Building scalable, innovative digital solutions for businesses and beyond",
+  "buttons": [
+    {
+      "text": "Our Services",
+      "link": "#services",
+      "style": "primary"
+    },
+    {
+      "text": "Start Your Project",
+      "link": "#contact",
+      "style": "secondary"
+    }
+  ],
+  "images": [
+    "assets/images/hero/hero1.webp",
+    "assets/images/hero/hero2.webp",
+    "assets/images/hero/hero3.webp",
+    "assets/images/hero/hero4.webp",
+    "assets/images/hero/hero5.webp"
+  ]
+}

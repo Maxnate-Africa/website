@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://www.maxnate.com/">
+    <meta name="theme-color" content="#008080">
+    <meta name="description" content="Maxnate - Leading African software development & web services company. Custom software solutions, cloud hosting, web applications, and digital transformation services across Africa.">
+    <meta name="keywords" content="software development Africa, web development Tanzania, cloud hosting Africa, custom software solutions, digital transformation, web services, agritech solutions">
+    <meta name="author" content="Maxnate">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="Maxnate - Software Development & Web Services Africa">
+    <meta property="og:description" content="Transform your business with cutting-edge software solutions. Expert web development, cloud hosting, and digital innovation across Africa.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.maxnate.com">
+    <meta property="og:image" content="https://maxnate.com/assets/images/logo/og-image.png">
+    <meta property="og:site_name" content="Maxnate Africa">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Maxnate - Software Development & Web Services Africa">
+    <meta name="twitter:description" content="Transform your business with cutting-edge software solutions across Africa.">
+    <meta name="twitter:image" content="https://maxnate.com/assets/images/logo/og-image.png">
+    <link rel="preconnect" href="https://identity.netlify.com" crossorigin>
+    <link rel="preconnect" href="https://wa.me" crossorigin>
+    
+    <title>Maxnate | Software Development & Web Services | Africa</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="assets/css/main.93f69b1538.css">
+    <link rel="stylesheet" href="assets/css/floating-offer.9df10912c7.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/logo/favicon.png">
+    
+    <!-- Netlify Identity Widget (for CMS authentication) -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+        <!-- Organization & WebSite Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Maxnate Africa",
+            "url": "https://www.maxnate.com/",
+            "logo": "https://www.maxnate.com/assets/images/logo/logo.png",
+            "sameAs": [
+                "https://facebook.com/maxnateafrica",
+                "https://x.com/maxnateafrica",
+                "https://instagram.com/maxnateafrica",
+                "https://linkedin.com/company/maxnate-africa"
+            ],
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+255746662612",
+                "contactType": "customer service",
+                "areaServed": "Africa",
+                "availableLanguage": ["en"]
+            }
+        }
+        </script>
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": "https://www.maxnate.com/",
+            "name": "Maxnate Africa",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://www.maxnate.com/?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+            }
+        }
+        </script>
+        <!-- Dynamic Services Structured Data Injection -->
+        <script>
+            (function(){
+                fetch('/assets/data/services.json').then(r=>r.json()).then(list=>{
+                    if(!Array.isArray(list) || !list.length) return;
+                    const servicesSchema = {
+                        "@context": "https://schema.org",
+                        "@graph": list.slice(0,10).map(s=>({
+                            "@type": "Service",
+                            "name": s.title || s.name || 'Service',
+                            "description": (s.description || '').slice(0,300),
+                            "provider": {"@type":"Organization","name":"Maxnate Africa"},
+                            "areaServed": "Africa",
+                            "serviceType": s.slug || s.title || ''
+                        }))
+                    };
+                    const el = document.createElement('script');
+                    el.type='application/ld+json';
+                    el.textContent = JSON.stringify(servicesSchema);
+                    document.head.appendChild(el);
+                }).catch(()=>{});
+            })();
+        </script>
+</head>
+<body>
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="logo">
+                    <a href="/">
+                        <img src="assets/images/logo/logo.png" alt="Maxnate Logo" style="height: 50px;">
+                    </a>
+                </div>
+                
+                <button class="mobile-toggle" aria-label="Toggle navigation">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                
+                <ul class="nav-menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#news">News & Events</a></li>
+                    <li><a href="pages/offers.html">Offers</a></li>
+                    <li><a href="#contact">Contacts</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero-carousel" id="home">
+        <div class="carousel-images">
+            <div class="hero-image" style="background-image: url('assets/images/hero/hero1.webp');"></div>
+            <div class="hero-image" style="background-image: url('assets/images/hero/hero2.webp');"></div>
+            <div class="hero-image" style="background-image: url('assets/images/hero/hero3.webp');"></div>
+            <div class="hero-image" style="background-image: url('assets/images/hero/hero4.webp');"></div>
+            <div class="hero-image" style="background-image: url('assets/images/hero/hero5.webp');"></div>
+        </div>
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">Innovating for Smarter Future</h1>
+            <p class="hero-subtitle">Building scalable, innovative digital solutions for businesses and beyond</p>
+            <div class="hero-buttons">
+                <a href="#services" class="btn btn-primary">Our Services</a>
+                <a href="#contact" class="btn btn-secondary">Start Your Project</a>
+            </div>
+        </div>
+
+        <button class="carousel-button prev" aria-label="Previous slide">&#10094;</button>
+        <button class="carousel-button next" aria-label="Next slide">&#10095;</button>
+    </section>
+
+        <!-- ABOUT US SECTION -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">About Maxnate</h2>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Software Excellence Across Africa</h3>
+                    <p>Maxnate is a leading software development and web services company headquartered in Tanzania, serving clients across Africa and beyond. We specialize in building custom software solutions, modern web applications, and providing enterprise-grade cloud hosting services.</p>
+                    <p>With a team of experienced developers, designers, and digital strategists, we combine technical expertise with deep understanding of African markets to deliver solutions that drive real business value. From startups to established enterprises, we partner with organizations ready to leverage technology for growth.</p>
+                </div>
+
+                <div class="about-image">
+                    <img src="assets/images/story/story.png" alt="Maxnate Software Development Team" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VISION, MISSION, CORE VALUES SECTION -->
+    <section id="vision" class="vmv-section">
+        <div class="container">
+            <div class="vmv-grid">
+                <div class="vmv-card slide-in-left">
+                    <div class="vmv-icon">💡</div>
+                    <h3>Our Vision</h3>
+                    <p>To be Africa's leading technology partner, driving digital transformation and innovation across the continent through world-class software solutions.</p>
+                </div>
+                
+                <div class="vmv-card slide-in-up">
+                    <div class="vmv-icon">🎯</div>
+                    <h3>Our Mission</h3>
+                    <p>Delivering cutting-edge software development and web services that empower businesses to compete globally while fostering local innovation.</p>
+                </div>
+                
+                <div class="vmv-card slide-in-right">
+                    <div class="vmv-icon">⭐</div>
+                    <h3>Core Values</h3>
+                    <div class="values-list">
+                        <div class="value-item">
+                            <span class="value-icon">💡</span>
+                            <span>Innovation First</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">🤝</span>
+                            <span>Client Success</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">⚙️</span>
+                            <span>Technical Excellence</span>
+                        </div>
+                        <div class="value-item">
+                            <span class="value-icon">🔒</span>
+                            <span>Security & Reliability</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" class="services-section">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <p class="section-subtitle">Single, consolidated overview of what we deliver</p>
+            <div class="services-grid">
+                <div class="service-card slide-in-up">
+                    <div class="service-icon"><i class="fas fa-cogs"></i></div>
+                    <h3>Complete Technology Solutions</h3>
+                    <p class="service-summary">End-to-end design, development, deployment and support of modern digital products for African businesses.</p>
+                    <div class="service-pill-group">
+                        <span class="service-pill"><i class="fas fa-code"></i> Custom Apps</span>
+                        <span class="service-pill"><i class="fas fa-laptop-code"></i> Web & UX</span>
+                        <span class="service-pill"><i class="fas fa-cloud"></i> Cloud & Hosting</span>
+                        <span class="service-pill"><i class="fas fa-rocket"></i> Digital Strategy</span>
+                        <span class="service-pill"><i class="fas fa-seedling"></i> AgriTech</span>
+                        <span class="service-pill"><i class="fas fa-tools"></i> 24/7 Support</span>
+                    </div>
+                    <a href="#contact" class="service-link">Start Your Project →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROJECTS SECTION -->
+    <section id="projects" class="projects-section">
+        <div class="container">
+            <h2 class="section-title">Projects</h2>
+            <p class="section-subtitle">Selected implementations showcasing impact and innovation</p>
+            <div class="projects-grid">
+                <!-- Dynamic project cards injected by assets/js/main.92cf75dafd.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- NEWS & EVENTS SECTION -->
+    <section id="news" class="news-section">
+        <div class="container">
+            <h2 class="section-title">News & Events</h2>
+            <p class="section-subtitle">Stay updated with our latest activities and industry insights</p>
+
+            <div class="news-grid">
+                <!-- Dynamic news cards injected by assets/js/main.92cf75dafd.js -->
+            </div>
+            <button class="show-more-btn" id="showMoreNews" aria-expanded="false" aria-controls="news" title="Show more news"><i class="fas fa-plus"></i> Show More</button>
+        </div>
+    </section>
+
+    <!-- CONTACT SECTION -->
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2 class="section-title">Let's build something together</h2>
+            <!-- <p class="section-subtitle">Let's build something amazing together</p> -->
+            
+            <div class="contact-grid">
+                <div class="contact-form-container">
+                    <h3>Get in Touch</h3>
+                    <form class="contact-form" id="contactForm" novalidate>
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" required aria-describedby="name-error">
+                            <span id="name-error" class="error-message" aria-live="polite"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" required aria-describedby="email-error">
+                            <span id="email-error" class="error-message" aria-live="polite"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" aria-describedby="phone-error">
+                            <span id="phone-error" class="error-message" aria-live="polite"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="service">Service Interested In</label>
+                            <select id="service" name="service" aria-describedby="service-error">
+                                <option value="">Select a service</option>
+                                <option value="custom-software">Custom Software Development</option>
+                                <option value="web-development">Web Development & Design</option>
+                                <option value="cloud-hosting">Cloud Hosting & Infrastructure</option>
+                                <option value="digital-transformation">Digital Transformation</option>
+                                <option value="agritech">AgriTech Solutions</option>
+                                <option value="maintenance">Maintenance & Support</option>
+                                <option value="consultation">Free Consultation</option>
+                            </select>
+                            <span id="service-error" class="error-message" aria-live="polite"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message">Project Details *</label>
+                            <textarea id="message" name="message" rows="5" required placeholder="Tell us about your project requirements..." aria-describedby="message-error"></textarea>
+                            <span id="message-error" class="error-message" aria-live="polite"></span>
+                        </div>
+
+                        <!-- Form status messages -->
+                        <div id="form-status" class="form-status" aria-live="polite" role="status"></div>
+
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <span class="btn-text">submit</span>
+                            <span class="btn-spinner" style="display: none;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                                        <animate attributeName="stroke-dashoffset" dur="1s" repeatCount="indefinite" values="31.416;0"/>
+                                    </circle>
+                                </svg>
+                            </span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="contact-info">
+                    <h3>Contact Information</h3>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">📍</div>
+                        <div class="info-content">
+                            <h4>Headquarters</h4>
+                            <p>Kisesa, Mwanza<br>Tanzania, East Africa</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">📧</div>
+                        <div class="info-content">
+                            <h4>Email</h4>
+                            <p><a href="mailto:connect@maxnate.com">Connect@maxnate.com</a></p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">📞</div>
+                        <div class="info-content">
+                            <h4>Phone</h4>
+                            <p>+255 746 662 612</p>
+                            <p class="info-note">Mon-Fri: 8AM - 6PM EAT</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">⏰</div>
+                        <div class="info-content">
+                            <h4>Business Hours</h4>
+                            <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
+                            <p>Saturday: 9:00 AM - 2:00 PM</p>
+                            <p>Sunday: Closed</p>
+                        </div>
+                    </div>
+
+                    <div class="map-container">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.924427739626!2d32.886124!3d-2.516767!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x183f1f0b07c70b39%3A0x12d0c2f96d2d0d1b!2sMwanza%2C%20Tanzania!5e0!3m2!1sen!2sus!4v1708860000000!5m2!1sen!2sus"
+                            width="100%"
+                            height="250"
+                            style="border:0; border-radius:8px; margin-top:20px;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col footer-brand">
+                    <img src="assets/images/logo/footer.svg" alt="Maxnate Logo" class="footer-logo">
+                    <p class="footer-tagline">Software Excellence for Africa</p>
+                    <p class="footer-description">
+                        Leading software development and web services company, empowering African businesses with world-class technology solutions.
+                    </p>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="#services">Custom Software Development</a></li>
+                        <li><a href="#services">Web Development & Design</a></li>
+                        <li><a href="#services">Cloud Hosting</a></li>
+                        <li><a href="#services">Digital Transformation</a></li>
+                        <li><a href="#services">AgriTech Solutions</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul class="footer-links">
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#news">News & Events</a></li>
+                        <li><a href="pages/offers.html">Offers</a></li>
+                        <li><a href="https://ebooks.maxnate.com" target="_blank" rel="noopener">E-Books Store</a></li>
+                        <li><a href="#contact">Careers</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Connect With Us</h4>
+                    <div class="footer-contact">
+                        <p><strong>Email:</strong> connect@maxnate.com</p>
+                        <p><strong>Phone:</strong> +255 746 662 612</p>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://facebook.com/maxnateafrica" target="_blank" rel="noopener" aria-label="Facebook" title="Facebook">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                            </svg>
+                        </a>
+                        
+                        <a href="https://x.com/maxnateafrica" target="_blank" rel="noopener" aria-label="X (Twitter)" title="X">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                        </a>
+                        
+                        <a href="https://instagram.com/maxnateafrica" target="_blank" rel="noopener" aria-label="Instagram" title="Instagram">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                            </svg>
+                        </a>
+                        
+                        <a href="https://linkedin.com/company/maxnate-africa" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </a>
+                        
+                        <a href="https://wa.me/255746662612" target="_blank" rel="noopener" aria-label="WhatsApp" title="WhatsApp">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2025 Maxnate Africa. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Static content service -->
+    <script src="assets/js/content-service.62f5244798.js"></script>
+    <script src="assets/js/main.92cf75dafd.js"></script>
+    <script src="assets/js/floating-offer.cd7f23b991.js"></script>
+    
+    <!-- Netlify Identity redirect handling -->
+    <script>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/cms-admin/";
+            });
+          }
+        });
+      }
+    </script>
+</body>
+</html>

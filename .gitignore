@@ -3,7 +3,7 @@ node_modules/
 package-lock.json
 
 # Build output
-dist/
+# dist/ - committed for GitHub Pages static deployment
 
 # CMS
 .decap-server/
