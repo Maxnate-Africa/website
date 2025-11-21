@@ -11,6 +11,9 @@ public_folder: "/assets/images/uploads"
 # Site URL for preview
 site_url: https://maxnate.com
 
+# Custom logo for CMS interface
+logo_url: https://maxnate.com/assets/images/cms.png
+
 collections:
   # News Collection
   - name: "news"

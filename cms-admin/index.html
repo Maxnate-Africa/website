@@ -7,6 +7,38 @@
   <link href="config.yml" type="text/yaml" rel="cms-config-url">
   <!-- Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  
+  <!-- Custom styling for Identity widget -->
+  <style>
+    /* Customize the login modal */
+    .netlify-identity-widget {
+      --accent-color: #008080;
+      --border-radius: 8px;
+    }
+    
+    /* Hide Netlify branding in the modal */
+    .netlify-identity-widget .netlify-identity-item:last-child,
+    .netlify-identity-widget [href*="netlify.com"],
+    .netlify-identity-widget img[alt*="Netlify"],
+    .netlify-identity-widget-footer {
+      display: none !important;
+    }
+    
+    /* Style the modal container */
+    .modalContainer {
+      border-radius: 12px !important;
+    }
+    
+    /* Customize button colors */
+    .btnHeader {
+      background-color: #008080 !important;
+      border-radius: 6px !important;
+    }
+    
+    .btnHeader:hover {
+      background-color: #006666 !important;
+    }
+  </style>
 </head>
 <body>
   <!-- Decap CMS renders here -->
