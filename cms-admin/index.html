@@ -54,8 +54,8 @@
     button:hover,
     .btn:hover,
     [type="submit"]:hover {
-      background-color: #020202 !important;
-      border-color: #020202 !important;
+      background-color: #006666 !important;
+      border-color: #006666 !important;
     }
     
     /* Inject "Powered by Maxnate" into any modal footer */
@@ -75,13 +75,13 @@
 </head>
 <body>
   <!-- Custom login screen overlay -->
-  <div id="custom-login-screen" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #006666 0%, #008080 100%); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
+  <div id="custom-login-screen" style="display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #006666 0%, #008080 100%); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
     <div style="background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center; max-width: 400px; width: 90%;">
-      <img src="https://maxnate.com/assets/images/logo/cms-01.png" alt="Maxnate Logo" style="max-width: 200px; height: auto; margin-bottom: 20px;">
+      <img id="cms-logo" src="https://maxnate.com/assets/images/logo/cms-01.png" alt="Maxnate Logo" style="max-width: 200px; height: auto; margin: 0 auto 20px; display: block;" onerror="this.src='/assets/images/logo/cms-01.png'">
       <h1 style="color: #008080; font-size: 24px; margin-bottom: 10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">Welcome to Maxnate CMS</h1>
       <p style="color: #666; margin-bottom: 30px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">Please login to manage your content</p>
       <button id="login-button" style="background: #008080; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 500; width: 100%; transition: background 0.3s;">
-        Login with Netlify Identity
+        Sign in
       </button>
       <p style="color: #008080; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; font-weight: 500;">Powered by Maxnate</p>
     </div>
