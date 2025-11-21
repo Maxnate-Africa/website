@@ -11,13 +11,34 @@
   <!-- Decap CMS renders here -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   
+  <!-- Initialize CMS with explicit config path -->
+  <script>
+    // Initialize CMS with config.yml in same directory
+    window.CMS_MANUAL_INIT = true;
+    
+    // Load config and initialize
+    fetch('/config.yml')
+      .then(response => response.text())
+      .then(config => {
+        window.CMS.init({ config: window.jsyaml.load(config) });
+      })
+      .catch(err => {
+        console.error('Error loading config:', err);
+        // Fallback: let CMS auto-discover config.yml
+        window.CMS.init();
+      });
+  </script>
+  
+  <!-- YAML parser for config loading -->
+  <script src="https://cdn.jsdelivr.net/npm/js-yaml@4/dist/js-yaml.min.js"></script>
+  
   <!-- Netlify Identity redirect handling -->
   <script>
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on("init", user => {
         if (!user) {
           window.netlifyIdentity.on("login", () => {
-            document.location.href = "/cms-admin/";
+            document.location.href = "/";
           });
         }
       });
