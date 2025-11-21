@@ -11,6 +11,18 @@
   to = "/cms-admin/index.html"
   status = 200
 
+[[redirects]]
+  from = "/offers"
+  to = "/pages/offers.html"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "/offers/"
+  to = "/pages/offers.html"
+  status = 301
+  force = true
+
 [[headers]]
   for = "/cms-admin/*"
   [headers.values]
