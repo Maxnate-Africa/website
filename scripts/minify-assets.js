@@ -10,11 +10,13 @@ const CleanCSS = require('clean-css');
 const glob = require('glob');
 
 const projectRoot = path.resolve(__dirname, '..');
-const assetsDir = path.join(projectRoot, 'assets');
-const jsDir = path.join(assetsDir, 'js');
-const cssDir = path.join(assetsDir, 'css');
+const assetsRoot = process.env.ASSETS_ROOT
+  ? path.resolve(process.env.ASSETS_ROOT)
+  : path.join(projectRoot, 'assets');
+const jsDir = path.join(assetsRoot, 'js');
+const cssDir = path.join(assetsRoot, 'css');
 
-function log(msg) { console.log(`[minify] ${msg}`); }
+function log(msg) { console.log(`[minify:${assetsRoot.includes('dist') ? 'dist' : 'src'}] ${msg}`); }
 
 async function minifyJsFiles() {
   const pattern = path.join(jsDir, '**', '*.js');

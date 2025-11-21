@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Maxnate Africa multi-tenant website with Decap CMS",
   "scripts": {
-    "build": "node scripts/build-content.js && node scripts/build-admin.js && node scripts/minify-assets.js",
+    "build": "node scripts/build-dist.js",
     "build:content": "node scripts/build-content.js",
     "build:admin": "node scripts/build-admin.js",
+    "build:dist": "node scripts/build-dist.js",
     "dev": "npm run build:content && npx http-server -p 8080"
   },
   "dependencies": {

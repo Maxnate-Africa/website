@@ -6,9 +6,12 @@ const matter = require('gray-matter');
 const yaml = require('js-yaml');
 
 const contentDir = path.join(__dirname, '..', 'content');
-const outputDir = path.join(__dirname, '..', 'assets', 'data');
+// Allow overriding output directory for JSON assets (e.g., dist build)
+const outputDir = process.env.BUILD_OUTPUT_DIR
+  ? path.resolve(process.env.BUILD_OUTPUT_DIR)
+  : path.join(__dirname, '..', 'assets', 'data');
 
-console.log('Building content data from markdown...');
+console.log(`Building content data from markdown -> ${outputDir}`);
 
 // Ensure output directory exists
 if (!fs.existsSync(outputDir)) {

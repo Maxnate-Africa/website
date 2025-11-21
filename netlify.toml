@@ -1,9 +1,8 @@
 [build]
-  # Full production build: content generation + admin copy + asset minification.
+  # Dist build: copies static, builds JSON, minifies assets.
   command = "npm install && npm run build"
-  publish = "."
-  # Ignore builds unless relevant folders change (remove to build every commit).
-  ignore = "git diff --quiet HEAD^ HEAD -- cms-admin/ content/ assets/js/ assets/css/ scripts/ netlify.toml package.json"
+  publish = "dist"
+  ignore = "git diff --quiet HEAD^ HEAD -- cms-admin/ content/ assets/js/ assets/css/ pages/ index.html scripts/ netlify.toml package.json"
 
 # Only rebuild when CMS or content changes
 # GitHub Pages handles public site deployment
