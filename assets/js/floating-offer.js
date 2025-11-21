@@ -1,4 +1,9 @@
 (function() {
+  // Skip on offers listing page to avoid duplication
+  if (typeof location !== 'undefined' && /\/pages\/offers\.html$/i.test(location.pathname)) {
+    return;
+  }
+
   let WHATSAPP_NUMBER = '255746662612';
   let hasShownOffer = sessionStorage.getItem('offerShown');
   
@@ -61,11 +66,24 @@
   
   async function loadFloatingOffer() {
     try {
+      // Try to load optional page settings for WhatsApp number
+      try {
+        const settingsRes = await fetch('/assets/data/offers-page.json');
+        if (settingsRes.ok) {
+          const settings = await settingsRes.json();
+          if (settings && settings.whatsappNumber) {
+            WHATSAPP_NUMBER = settings.whatsappNumber;
+          }
+        }
+      } catch (_) {}
+
       const response = await fetch('/assets/data/offers.json');
       if (!response.ok) return;
       
       const data = await response.json();
-      const offers = data.offers || [];
+      const offers = Array.isArray(data)
+        ? data
+        : (data.offers || []);
       const now = Date.now();
       const activeOffer = offers.find(o => 
         (o.status === 'published') && 
