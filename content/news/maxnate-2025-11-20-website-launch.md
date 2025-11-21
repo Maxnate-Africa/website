@@ -1,5 +1,4 @@
 ---
-website: maxnate
 title: Maxnate Launches New Website with Modern CMS
 description: We're excited to announce the launch of our redesigned website, now
   powered by  CMS for seamless content management and improved performance.

@@ -1,5 +1,4 @@
 ---
-website: maxnate
 title: "E-Commerce Platform for African Retailer"
 description: "Custom-built e-commerce solution with inventory management, payment integration, and mobile-responsive design for a leading African retail chain."
 status: published
