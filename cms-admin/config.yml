@@ -12,41 +12,14 @@ public_folder: "/assets/images/uploads"
 site_url: https://maxnate.com
 
 collections:
-  # Websites Collection - Multi-tenant setup
-  - name: "websites"
-    label: "Websites"
-    label_singular: "Website"
-    folder: "content/websites"
-    create: true
-    identifier_field: slug
-    slug: "{{slug}}"
-    fields:
-      - { label: "Slug", name: "slug", widget: "string", pattern: ['^[a-z0-9-]+$', "Only lowercase letters, numbers, and hyphens"], hint: "URL-friendly identifier (e.g., maxnate)" }
-      - { label: "Name", name: "name", widget: "string" }
-      - { label: "Domain", name: "domain", widget: "string", required: false }
-      - { label: "URL", name: "url", widget: "string", required: false }
-      - label: "Theme"
-        name: "theme"
-        widget: "select"
-        options: ["teal", "blue", "red", "purple", "green"]
-        default: "teal"
-      - { label: "Created Date", name: "createdAt", widget: "datetime" }
-
   # News Collection
   - name: "news"
     label: "News & Events"
     label_singular: "News Article"
     folder: "content/news"
     create: true
-    slug: "{{website}}-{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
-      - label: "Website"
-        name: "website"
-        widget: "relation"
-        collection: "websites"
-        search_fields: ["name", "slug"]
-        value_field: "slug"
-        display_fields: ["name"]
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Description", name: "description", widget: "text" }
       - label: "Status"
@@ -79,16 +52,9 @@ collections:
     label_singular: "Project"
     folder: "content/projects"
     create: true
-    slug: "{{website}}-{{slug}}"
+    slug: "{{slug}}"
     summary: "{{title}} - {{client}}"
     fields:
-      - label: "Website"
-        name: "website"
-        widget: "relation"
-        collection: "websites"
-        search_fields: ["name", "slug"]
-        value_field: "slug"
-        display_fields: ["name"]
       - { label: "Title", name: "title", widget: "string", hint: "Project name" }
       - { label: "Description", name: "description", widget: "text", hint: "Brief project description" }
       - label: "Status"

@@ -18,26 +18,6 @@ if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir, { recursive: true });
 }
 
-// Read websites
-function readWebsites() {
-  const websitesDir = path.join(contentDir, 'websites');
-  if (!fs.existsSync(websitesDir)) return [];
-  
-  const files = fs.readdirSync(websitesDir).filter(f => f.endsWith('.md'));
-  return files.map(file => {
-    const content = fs.readFileSync(path.join(websitesDir, file), 'utf8');
-    const { data } = matter(content);
-    return {
-      slug: data.slug,
-      name: data.name,
-      domain: data.domain || '',
-      url: data.url || '',
-      theme: data.theme || 'teal',
-      createdAt: data.createdAt
-    };
-  });
-}
-
 // Read news
 function readNews() {
   const newsDir = path.join(contentDir, 'news');
@@ -49,7 +29,6 @@ function readNews() {
     const { data } = matter(content);
     return {
       id: path.basename(file, '.md'),
-      website: data.website,
       title: data.title,
       description: data.description,
       status: data.status || 'draft',
@@ -75,7 +54,6 @@ function readProjects() {
     const { data } = matter(content);
     return {
       id: path.basename(file, '.md'),
-      website: data.website,
       title: data.title,
       description: data.description,
       status: data.status || 'draft',
@@ -164,7 +142,6 @@ function readOffers() {
 }
 
 // Build data
-const websites = readWebsites();
 const news = readNews();
 const projects = readProjects();
 const hero = readHero();
@@ -180,11 +157,6 @@ const activeServices = services.filter(s => s.status === 'active');
 const publishedOffers = offers.filter(o => o.status === 'published');
 
 // Write output files
-fs.writeFileSync(
-  path.join(outputDir, 'websites.json'),
-  JSON.stringify(websites, null, 2)
-);
-
 fs.writeFileSync(
   path.join(outputDir, 'news.json'),
   JSON.stringify(publishedNews, null, 2)
@@ -226,7 +198,6 @@ fs.writeFileSync(
   JSON.stringify(publishedOffers, null, 2)
 );
 
-console.log(`✓ Built ${websites.length} websites`);
 console.log(`✓ Built ${publishedNews.length}/${news.length} news articles (published)`);
 console.log(`✓ Built ${publishedProjects.length}/${projects.length} projects (published)`);
 console.log(`✓ Built hero content: ${hero ? 'yes' : 'no'}`);
