@@ -10,61 +10,54 @@
   
   <!-- Custom styling for Identity widget -->
   <style>
-    /* Customize the login modal */
-    .netlify-identity-widget {
+    /* Force teal color scheme globally */
+    :root {
+      --accent-color: #008080 !important;
+    }
+    
+    /* Customize the login modal - Netlify Identity */
+    div[class*="netlify"] {
       --accent-color: #008080;
       --border-radius: 8px;
     }
     
-    /* Hide Netlify branding in the modal */
-    .netlify-identity-widget .netlify-identity-item:last-child,
-    .netlify-identity-widget [href*="netlify.com"],
-    .netlify-identity-widget img[alt*="Netlify"],
-    .netlify-identity-widget-footer,
-    [class*="Provider"] img[alt="Netlify"] {
+    /* Hide ALL Netlify branding */
+    a[href*="netlify.com"],
+    img[alt*="Netlify"],
+    [class*="Provider"] img[alt="Netlify"],
+    div[class*="footer"]:has(a[href*="netlify"]) {
       display: none !important;
     }
     
-    /* Style the modal container */
-    .modalContainer,
-    [class*="modalContainer"] {
-      border-radius: 12px !important;
-    }
-    
-    /* Customize button colors */
-    .btnHeader,
-    [class*="btnHeader"],
+    /* Style buttons with teal */
+    button,
+    .btn,
+    [type="submit"],
+    a[class*="btn"],
     button[class*="button"] {
       background-color: #008080 !important;
-      border-radius: 6px !important;
+      border-color: #008080 !important;
     }
     
-    .btnHeader:hover,
-    [class*="btnHeader"]:hover,
-    button[class*="button"]:hover {
+    button:hover,
+    .btn:hover,
+    [type="submit"]:hover {
       background-color: #006666 !important;
+      border-color: #006666 !important;
     }
     
-    /* Add custom Maxnate branding footer - try multiple selectors */
-    .modalContent::after,
-    [class*="modalContent"]::after,
-    [class*="modal"] > div::after {
-      content: "Powered by Maxnate";
-      display: block;
-      text-align: center;
-      padding: 12px;
-      font-size: 12px;
-      color: #008080;
-      font-weight: 500;
-      margin-top: 10px;
-      border-top: 1px solid #e0e0e0;
-    }
-    
-    /* Style CMS dashboard logo */
-    .cms-app-header img,
-    [class*="app-header"] img {
-      max-height: 40px !important;
-      width: auto !important;
+    /* Inject "Powered by Maxnate" into any modal footer */
+    div[class*="modal"] > div:last-child::after,
+    form::after {
+      content: "Powered by Maxnate" !important;
+      display: block !important;
+      text-align: center !important;
+      padding: 12px !important;
+      font-size: 12px !important;
+      color: #008080 !important;
+      font-weight: 500 !important;
+      margin-top: 10px !important;
+      border-top: 1px solid #e0e0e0 !important;
     }
   </style>
 </head>
@@ -84,14 +77,20 @@
       });
     }
     
-    // Debug: Log the actual structure after page loads
+    // Debug: Check if logo loads
     window.addEventListener('load', () => {
       setTimeout(() => {
-        console.log('=== Debugging CMS Structure ===');
-        console.log('Identity widget:', document.querySelector('[class*="netlify-identity"]'));
-        console.log('Modal elements:', document.querySelectorAll('[class*="modal"]'));
-        console.log('All divs with classes:', Array.from(document.querySelectorAll('div[class]')).map(el => el.className));
-      }, 2000);
+        console.log('=== Logo Debug ===');
+        const allImages = document.querySelectorAll('img');
+        console.log('All images on page:', Array.from(allImages).map(img => ({
+          src: img.src,
+          alt: img.alt,
+          visible: img.offsetHeight > 0
+        })));
+        
+        // Check if logo_url is being used
+        console.log('Expected logo URL: https://maxnate.com/assets/images/logo/cms-01.png');
+      }, 3000);
     });
   </script>
 </body>
