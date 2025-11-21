@@ -115,6 +115,14 @@ collections:
       - { label: "Title", name: "title", widget: "string", hint: "Offer title" }
       - { label: "Description", name: "description", widget: "text", hint: "Offer details" }
       - { label: "Discount/Value", name: "discount", widget: "string", hint: "e.g., 20% OFF, $500" }
+      - { label: "Price", name: "price", widget: "number", value_type: "float", required: false, hint: "Base price before discount (numeric)" }
+      - label: "Price Currency"
+        name: "priceCurrency"
+        widget: "select"
+        options: ["USD", "TZS", "EUR", "GBP", "KES", "UGX", "ZAR"]
+        default: "USD"
+        required: false
+        hint: "Currency code for price (ISO 4217)"
       - label: "Icon"
         name: "icon"
         widget: "select"
