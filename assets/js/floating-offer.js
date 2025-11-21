@@ -1,4 +1,8 @@
 (function() {
+  // Configure beacon endpoint for analytics (Netlify Function)
+  if (typeof window !== 'undefined') {
+    window.FLOATING_OFFER_BEACON_URL = '/.netlify/functions/analytics';
+  }
   // Skip on offers listing page to avoid duplication
   if (typeof location !== 'undefined' && /\/pages\/offers\.html$/i.test(location.pathname)) {
     return;
@@ -53,19 +57,25 @@
     
     const floatingOffer = document.createElement('div');
     floatingOffer.className = 'floating-offer-card';
+    floatingOffer.setAttribute('role', 'dialog');
+    floatingOffer.setAttribute('aria-modal', 'true');
+    floatingOffer.setAttribute('aria-live', 'polite');
+    floatingOffer.setAttribute('tabindex', '-1');
+    const titleId = `floating-offer-title-${offer.id}`;
+    floatingOffer.setAttribute('aria-labelledby', titleId);
     floatingOffer.innerHTML = `
-      <button class="floating-offer-minimize" aria-label="Minimize offer">_</button>
-      <button class="floating-offer-close" aria-label="Close offer">&times;</button>
+      <button class="floating-offer-minimize" aria-label="Minimize offer" aria-expanded="true">_</button>
+      <button class="floating-offer-close" aria-label="Close promotional offer" data-action="close">&times;</button>
       <div class="floating-offer-content">
         <div class="floating-offer-badge">LIMITED OFFER</div>
-        <h4 class="floating-offer-title">${offer.title}</h4>
+        <h4 class="floating-offer-title" id="${titleId}">${offer.title}</h4>
         <p class="floating-offer-desc">${offer.description || ''}</p>
         <div class="floating-offer-discount">${offer.discount || offer.value || ''}</div>
         <div class="floating-offer-meta">
-          <span class="floating-offer-code">${code}</span>
-          ${expiryTxt ? `<span class="floating-offer-expiry">Expires: ${expiryTxt}</span>` : ''}
+          <span class="floating-offer-code" aria-label="Offer code ${code}">${code}</span>
+          ${expiryTxt ? `<span class="floating-offer-expiry" aria-label="Offer expires on ${expiryTxt}">Expires: ${expiryTxt}</span>` : ''}
         </div>
-        <a class="floating-offer-claim" href="${buildWhatsAppLink(offer)}" target="_blank" rel="noopener">
+        <a class="floating-offer-claim" href="${buildWhatsAppLink(offer)}" target="_blank" rel="noopener" aria-label="Claim offer ${code} via WhatsApp">
           Claim Now via WhatsApp
         </a>
         <a class="floating-offer-viewall" href="/offers" aria-label="View all current offers">
@@ -82,22 +92,53 @@
     logOfferEvent('impression', { offerId: offer.id });
     
     // Event handlers
-    floatingOffer.querySelector('.floating-offer-close').addEventListener('click', () => {
+    const closeBtn = floatingOffer.querySelector('.floating-offer-close');
+    closeBtn.addEventListener('click', () => {
       floatingOffer.classList.remove('show');
       setTimeout(() => floatingOffer.remove(), 300);
       localStorage.setItem(CLOSED_KEY, Date.now().toString());
       logOfferEvent('close', { offerId: offer.id });
     });
     
-    floatingOffer.querySelector('.floating-offer-minimize').addEventListener('click', () => {
-      floatingOffer.classList.toggle('minimized');
-      logOfferEvent('minimize', { offerId: offer.id, minimized: floatingOffer.classList.contains('minimized') });
+    const minimizeBtn = floatingOffer.querySelector('.floating-offer-minimize');
+    minimizeBtn.addEventListener('click', () => {
+      const minimized = floatingOffer.classList.toggle('minimized');
+      minimizeBtn.setAttribute('aria-expanded', minimized ? 'false' : 'true');
+      floatingOffer.querySelector('.floating-offer-content').setAttribute('aria-hidden', minimized ? 'true' : 'false');
+      logOfferEvent('minimize', { offerId: offer.id, minimized });
     });
 
     const claimLink = floatingOffer.querySelector('.floating-offer-claim');
     claimLink.addEventListener('click', () => {
       logOfferEvent('click_claim', { offerId: offer.id });
     });
+    // Focus management & keyboard accessibility
+    const focusableSelectors = ['button', 'a', '[tabindex]:not([tabindex="-1"])'];
+    const getFocusable = () => Array.from(floatingOffer.querySelectorAll(focusableSelectors.join(',')));
+    function trapKey(e) {
+      if (e.key === 'Escape') {
+        closeBtn.click();
+        return;
+      }
+      if (e.key === 'Tab') {
+        const items = getFocusable();
+        if (!items.length) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+    floatingOffer.addEventListener('keydown', trapKey);
+    // Move initial focus to claim link for quick action
+    setTimeout(() => {
+      try { claimLink.focus(); } catch(_) {}
+    }, 300);
     const viewAllLink = floatingOffer.querySelector('.floating-offer-viewall');
     if (viewAllLink) {
       viewAllLink.addEventListener('click', () => logOfferEvent('click_view_all', { offerId: offer.id }));

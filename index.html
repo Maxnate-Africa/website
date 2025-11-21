@@ -3,14 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="canonical" href="https://www.maxnate.com/">
+    <meta name="theme-color" content="#008080">
     <meta name="description" content="Maxnate - Leading African software development & web services company. Custom software solutions, cloud hosting, web applications, and digital transformation services across Africa.">
     <meta name="keywords" content="software development Africa, web development Tanzania, cloud hosting Africa, custom software solutions, digital transformation, web services, agritech solutions">
     <meta name="author" content="Maxnate">
+    <meta name="robots" content="index,follow,max-image-preview:large">
+    <meta property="og:locale" content="en_US">
     <meta property="og:title" content="Maxnate - Software Development & Web Services Africa">
     <meta property="og:description" content="Transform your business with cutting-edge software solutions. Expert web development, cloud hosting, and digital innovation across Africa.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://www.maxnate.com">
     <meta property="og:image" content="https://maxnate.com/assets/images/logo/og-image.png">
+    <meta property="og:site_name" content="Maxnate Africa">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Maxnate - Software Development & Web Services Africa">
+    <meta name="twitter:description" content="Transform your business with cutting-edge software solutions across Africa.">
+    <meta name="twitter:image" content="https://maxnate.com/assets/images/logo/og-image.png">
+    <link rel="preconnect" href="https://identity.netlify.com" crossorigin>
+    <link rel="preconnect" href="https://wa.me" crossorigin>
     
     <title>Maxnate | Software Development & Web Services | Africa</title>
     
@@ -24,6 +35,65 @@
     
     <!-- Netlify Identity Widget (for CMS authentication) -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+        <!-- Organization & WebSite Structured Data -->
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Maxnate Africa",
+            "url": "https://www.maxnate.com/",
+            "logo": "https://www.maxnate.com/assets/images/logo/logo.png",
+            "sameAs": [
+                "https://facebook.com/maxnateafrica",
+                "https://x.com/maxnateafrica",
+                "https://instagram.com/maxnateafrica",
+                "https://linkedin.com/company/maxnate-africa"
+            ],
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+255746662612",
+                "contactType": "customer service",
+                "areaServed": "Africa",
+                "availableLanguage": ["en"]
+            }
+        }
+        </script>
+        <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "url": "https://www.maxnate.com/",
+            "name": "Maxnate Africa",
+            "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://www.maxnate.com/?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+            }
+        }
+        </script>
+        <!-- Dynamic Services Structured Data Injection -->
+        <script>
+            (function(){
+                fetch('/assets/data/services.json').then(r=>r.json()).then(list=>{
+                    if(!Array.isArray(list) || !list.length) return;
+                    const servicesSchema = {
+                        "@context": "https://schema.org",
+                        "@graph": list.slice(0,10).map(s=>({
+                            "@type": "Service",
+                            "name": s.title || s.name || 'Service',
+                            "description": (s.description || '').slice(0,300),
+                            "provider": {"@type":"Organization","name":"Maxnate Africa"},
+                            "areaServed": "Africa",
+                            "serviceType": s.slug || s.title || ''
+                        }))
+                    };
+                    const el = document.createElement('script');
+                    el.type='application/ld+json';
+                    el.textContent = JSON.stringify(servicesSchema);
+                    document.head.appendChild(el);
+                }).catch(()=>{});
+            })();
+        </script>
 </head>
 <body>
     <!-- NAVIGATION BAR -->

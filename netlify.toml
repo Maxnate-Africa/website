@@ -2,6 +2,7 @@
   # Dist build: copies static, builds JSON, minifies assets.
   command = "npm install && npm run build"
   publish = "dist"
+  functions = "netlify/functions"
   ignore = "git diff --quiet HEAD^ HEAD -- cms-admin/ content/ assets/js/ assets/css/ pages/ index.html scripts/ netlify.toml package.json"
 
 # Only rebuild when CMS or content changes
@@ -37,3 +38,9 @@
     X-Frame-Options = "SAMEORIGIN"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Security & performance headers (can expand later)
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"

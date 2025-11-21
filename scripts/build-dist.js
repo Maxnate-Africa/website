@@ -83,7 +83,32 @@ function minifyAssets(){
   log('Starting dist build');
   cleanDist();
   copyStatic();
+  // Optimize images after copy (generates WebP/AVIF variants)
+  process.env.DIST_ASSETS = path.join(dist, 'assets');
+  try {
+    require('./optimize-images');
+  } catch (e) {
+    log(`Image optimization skipped: ${e.message}`);
+  }
+  // HTML critical CSS + minification before content build & asset minification
+  try {
+    require('./minify-html');
+  } catch (e) {
+    log(`HTML minification skipped: ${e.message}`);
+  }
   buildContent();
   minifyAssets();
+  // Hash assets and rewrite HTML references
+  try {
+    require('./hash-assets');
+  } catch (e) {
+    log(`Hashing skipped: ${e.message}`);
+  }
+  // Generate sitemap.xml and robots.txt
+  try {
+    require('./generate-sitemap');
+  } catch (e) {
+    log(`Sitemap generation skipped: ${e.message}`);
+  }
   log('Dist build complete');
 })();
