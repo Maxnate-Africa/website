@@ -78,7 +78,7 @@
         <a class="floating-offer-claim" href="${buildWhatsAppLink(offer)}" target="_blank" rel="noopener" aria-label="Claim offer ${code} via WhatsApp">
           Claim Now via WhatsApp
         </a>
-        <a class="floating-offer-viewall" href="/offers" aria-label="View all current offers">
+        <a class="floating-offer-viewall" href="/pages/offers.html" aria-label="View all current offers">
           See All Offers →
         </a>
       </div>
