@@ -82,14 +82,21 @@
       setTimeout(() => {
         console.log('=== Logo Debug ===');
         const allImages = document.querySelectorAll('img');
-        console.log('All images on page:', Array.from(allImages).map(img => ({
-          src: img.src,
-          alt: img.alt,
-          visible: img.offsetHeight > 0
-        })));
+        allImages.forEach((img, index) => {
+          console.log(`Image ${index + 1}:`, {
+            src: img.src,
+            alt: img.alt || '(no alt)',
+            width: img.width,
+            height: img.height,
+            visible: img.offsetHeight > 0,
+            parentClass: img.parentElement?.className || '(no class)'
+          });
+        });
         
-        // Check if logo_url is being used
         console.log('Expected logo URL: https://maxnate.com/assets/images/logo/cms-01.png');
+        
+        // Check config
+        console.log('Checking if config.yml loaded correctly...');
       }, 3000);
     });
   </script>
