@@ -20,27 +20,35 @@
     .netlify-identity-widget .netlify-identity-item:last-child,
     .netlify-identity-widget [href*="netlify.com"],
     .netlify-identity-widget img[alt*="Netlify"],
-    .netlify-identity-widget-footer {
+    .netlify-identity-widget-footer,
+    [class*="Provider"] img[alt="Netlify"] {
       display: none !important;
     }
     
     /* Style the modal container */
-    .modalContainer {
+    .modalContainer,
+    [class*="modalContainer"] {
       border-radius: 12px !important;
     }
     
     /* Customize button colors */
-    .btnHeader {
+    .btnHeader,
+    [class*="btnHeader"],
+    button[class*="button"] {
       background-color: #008080 !important;
       border-radius: 6px !important;
     }
     
-    .btnHeader:hover {
+    .btnHeader:hover,
+    [class*="btnHeader"]:hover,
+    button[class*="button"]:hover {
       background-color: #006666 !important;
     }
     
-    /* Add custom Maxnate branding footer */
-    .modalContent::after {
+    /* Add custom Maxnate branding footer - try multiple selectors */
+    .modalContent::after,
+    [class*="modalContent"]::after,
+    [class*="modal"] > div::after {
       content: "Powered by Maxnate";
       display: block;
       text-align: center;
@@ -50,6 +58,13 @@
       font-weight: 500;
       margin-top: 10px;
       border-top: 1px solid #e0e0e0;
+    }
+    
+    /* Style CMS dashboard logo */
+    .cms-app-header img,
+    [class*="app-header"] img {
+      max-height: 40px !important;
+      width: auto !important;
     }
   </style>
 </head>
