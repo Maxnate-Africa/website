@@ -117,6 +117,47 @@
       </div>`;
     }
 
+    function injectJsonLd(offers){
+      if (!offers || !offers.length) return;
+      const active = offers.filter(o => (o.status||'draft')==='published');
+      if (!active.length) return;
+      const nowIso = new Date().toISOString();
+      const offerEntities = active.map(o => {
+        const validThrough = o.expiry ? new Date(o.expiry).toISOString() : undefined;
+        return {
+          '@type': 'Offer',
+          name: o.title,
+          description: o.description || '',
+          url: 'https://www.maxnate.com/offers',
+          sku: o.id,
+          priceCurrency: 'USD',
+          price: typeof o.price === 'number' ? o.price : (typeof o.value === 'number' ? o.value : '0'),
+          availability: 'https://schema.org/InStock',
+          validFrom: nowIso,
+          ...(validThrough ? { validThrough } : {}),
+          identifier: generateOfferCode(o.id)
+        };
+      });
+      const aggregate = {
+        '@context': 'https://schema.org',
+        '@type': 'AggregateOffer',
+        url: 'https://www.maxnate.com/offers',
+        offerCount: offerEntities.length,
+        offers: offerEntities,
+        lowPrice: offerEntities.reduce((min, o) => {
+          const p = parseFloat(o.price) || 0; return p < min ? p : min;
+        }, offerEntities[0] ? parseFloat(offerEntities[0].price)||0 : 0),
+        highPrice: offerEntities.reduce((max, o) => {
+          const p = parseFloat(o.price) || 0; return p > max ? p : max;
+        }, offerEntities[0] ? parseFloat(offerEntities[0].price)||0 : 0),
+        priceCurrency: 'USD'
+      };
+      const script = document.createElement('script');
+      script.type = 'application/ld+json';
+      script.textContent = JSON.stringify(aggregate);
+      document.head.appendChild(script);
+    }
+
     async function loadOffers(){
       const container = document.getElementById('offersContainer');
       const empty = document.getElementById('offersEmpty');
@@ -131,6 +172,7 @@
         }
         
         container.innerHTML = active.map(renderOfferCard).join('');
+        injectJsonLd(active);
         const now = Date.now();
         const first = active.find(o=> !o.expiry || new Date(o.expiry).getTime() > now);
         if (first) injectOverlay(first);

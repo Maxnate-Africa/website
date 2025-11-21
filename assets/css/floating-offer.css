@@ -152,6 +152,27 @@
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
+.floating-offer-viewall {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 8px;
+  margin-top: 10px;
+  transition: all 0.2s;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+.floating-offer-viewall:hover {
+  background: rgba(255,255,255,0.25);
+  transform: translateY(-2px);
+}
+
 /* Mobile responsive */
 @media (max-width: 480px) {
   .floating-offer-card {
