@@ -28,10 +28,6 @@ class ContentService {
     }
   }
 
-  async getWebsites() {
-    return await this.fetchJSON('websites.json') || [];
-  }
-
   async getNews(filters = {}) {
     const allNews = await this.fetchJSON('news.json') || [];
     return this.filterContent(allNews, filters);
@@ -62,11 +58,6 @@ class ContentService {
   filterContent(items, filters) {
     let filtered = items;
 
-    // Filter by website
-    if (filters.website) {
-      filtered = filtered.filter(item => item.website === filters.website);
-    }
-
     // Filter by status (though public data should only have published)
     if (filters.status) {
       filtered = filtered.filter(item => item.status === filters.status);
@@ -92,12 +83,6 @@ class ContentService {
     }
 
     return filtered;
-  }
-
-  // Helper to get website by slug
-  async getWebsite(slug) {
-    const websites = await this.getWebsites();
-    return websites.find(w => w.slug === slug);
   }
 }
 
