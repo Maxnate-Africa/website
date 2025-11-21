@@ -1,10 +1,9 @@
 [build]
-  # Build both content data and (optionally) any future bundling steps.
-  # Adjust to `npm run build` if you later introduce a full build pipeline.
-  command = "npm run build:content"
+  # Full production build: content generation + admin copy + asset minification.
+  command = "npm install && npm run build"
   publish = "."
-  # Optional: ignore builds unless content or CMS changes; disable if you want every commit built.
-  ignore = "git diff --quiet HEAD^ HEAD -- cms-admin/ content/ assets/js/ scripts/"
+  # Ignore builds unless relevant folders change (remove to build every commit).
+  ignore = "git diff --quiet HEAD^ HEAD -- cms-admin/ content/ assets/js/ assets/css/ scripts/ netlify.toml package.json"
 
 # Only rebuild when CMS or content changes
 # GitHub Pages handles public site deployment

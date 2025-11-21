@@ -5,8 +5,8 @@ const path = require('path');
 
 const repoRoot = path.resolve(__dirname, '..');
 const dist = path.join(repoRoot, 'dist');
-const distAdmin = path.join(dist, 'admin');
-const adminSrc = path.join(repoRoot, 'admin');
+const distAdmin = path.join(dist, 'cms-admin');
+const adminSrc = path.join(repoRoot, 'cms-admin');
 
 console.log('Building dist/admin...');
 
@@ -34,10 +34,9 @@ function copyRecursive(src, dest) {
 
 if (fs.existsSync(adminSrc)) {
   copyRecursive(adminSrc, distAdmin);
-  console.log('✓ Admin files copied to dist/admin');
+  console.log('✓ Admin files copied to dist/cms-admin');
 } else {
-  console.error('Error: admin folder not found');
-  process.exit(1);
+  console.warn('Warning: cms-admin folder not found, skipping admin copy');
 }
 
 console.log('Build complete!');
