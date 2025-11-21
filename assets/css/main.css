@@ -4,8 +4,9 @@
    =========================== */
 
 /* ===========================
-   GLOBAL STYLES & RESET
-   =========================== */
+    GLOBAL STYLES & RESET
+    =========================== */
+/* CRITICAL-START */
 * {
     margin: 0;
     padding: 0;
@@ -342,9 +343,10 @@ section {
     text-align: center;
 }
 
+/* CRITICAL-END */
 /* ===========================
-   SERVICES SECTION
-   =========================== */
+    SERVICES SECTION (Non-critical starts)
+    =========================== */
 .services-section {
     background: var(--off-white);
 }

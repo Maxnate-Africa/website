@@ -9,8 +9,6 @@
     "category": "Web Development",
     "expiry": "2025-12-31T23:59:59.000Z",
     "status": "published",
-    "createdAt": "2025-11-20T10:00:00.000Z",
-    "price": 500,
-    "priceCurrency": "USD"
+    "createdAt": "2025-11-20T10:00:00.000Z"
   }
 ]
