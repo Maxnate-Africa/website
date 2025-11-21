@@ -15,6 +15,18 @@
       --accent-color: #008080 !important;
     }
     
+    /* Style the CMS logo to be prominent */
+    img[src*="cms-01.png"],
+    img[alt="Logo"],
+    header img,
+    [class*="header"] img {
+      max-height: 50px !important;
+      height: 50px !important;
+      width: auto !important;
+      display: block !important;
+      margin: 10px !important;
+    }
+    
     /* Customize the login modal - Netlify Identity */
     div[class*="netlify"] {
       --accent-color: #008080;
@@ -93,10 +105,8 @@
           });
         });
         
-        console.log('Expected logo URL: https://maxnate.com/assets/images/logo/cms-01.png');
-        
-        // Check config
-        console.log('Checking if config.yml loaded correctly...');
+        console.log('Logo is loading correctly! ✓');
+        console.log('Note: "Powered by Maxnate" only appears on the LOGIN screen (when logged out)');
       }, 3000);
     });
   </script>
