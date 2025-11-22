@@ -92,38 +92,54 @@
   
   <!-- Netlify Identity redirect handling -->
   <script>
-    // Show custom login screen for non-authenticated users
-    const customLoginScreen = document.getElementById('custom-login-screen');
-    const loginButton = document.getElementById('login-button');
-    
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          // User not logged in - show custom login screen
-          customLoginScreen.style.display = 'flex';
-          
-          // Handle login button click
-          loginButton.addEventListener('click', () => {
-            window.netlifyIdentity.open();
-          });
-          
-          window.netlifyIdentity.on("login", () => {
+    // Wait for Netlify Identity to load
+    window.addEventListener('load', function() {
+      const customLoginScreen = document.getElementById('custom-login-screen');
+      const loginButton = document.getElementById('login-button');
+      
+      // Check if netlifyIdentity is available
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            // User not logged in - show custom login screen
+            customLoginScreen.style.display = 'flex';
+          } else {
+            // User is logged in - hide custom screen
             customLoginScreen.style.display = 'none';
-            document.location.href = "/";
-          });
-        } else {
-          // User is logged in - hide custom screen
+          }
+        });
+        
+        window.netlifyIdentity.on("login", () => {
           customLoginScreen.style.display = 'none';
+          window.netlifyIdentity.close();
+        });
+        
+        window.netlifyIdentity.on("logout", () => {
+          customLoginScreen.style.display = 'flex';
+        });
+        
+        // Handle login button click
+        if (loginButton) {
+          loginButton.addEventListener('click', () => {
+            console.log('Login button clicked');
+            if (window.netlifyIdentity) {
+              window.netlifyIdentity.open();
+            } else {
+              console.error('Netlify Identity not loaded');
+            }
+          });
+          
+          // Add hover effect to login button
+          loginButton.addEventListener('mouseenter', () => {
+            loginButton.style.background = '#006666';
+          });
+          loginButton.addEventListener('mouseleave', () => {
+            loginButton.style.background = '#008080';
+          });
         }
-      });
-    }
-    
-    // Add hover effect to login button
-    loginButton?.addEventListener('mouseenter', () => {
-      loginButton.style.background = '#006666';
-    });
-    loginButton?.addEventListener('mouseleave', () => {
-      loginButton.style.background = '#008080';
+      } else {
+        console.error('Netlify Identity widget not loaded');
+      }
     });
   </script>
 </body>
