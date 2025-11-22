@@ -101,84 +101,93 @@
   
   <!-- Netlify Identity redirect handling -->
   <script>
-    // Robust Identity / CMS initialization with fallback
+    // Hardened Identity init with script detection & manual widget trigger
     (function(){
-      const MAX_ATTEMPTS = 12; // ~6s total at 500ms interval
-      let attempts = 0;
       const customLoginScreen = document.getElementById('custom-login-screen');
       const loginButton = document.getElementById('login-button');
+      const root = document.getElementById('nc-root');
+      const MAX_INIT_WAIT_MS = 8000;
+      const RETRY_INTERVAL_MS = 400;
+      let initDone = false;
+      let start = Date.now();
+
       function showLogin(){
         if (customLoginScreen) customLoginScreen.style.display = 'flex';
         document.body.classList.remove('authenticated');
+        if (root) root.style.visibility = 'hidden';
       }
-      function hideLogin(){
+      function showCMS(){
         if (customLoginScreen) customLoginScreen.style.display = 'none';
         document.body.classList.add('authenticated');
+        if (root) root.style.visibility = 'visible';
       }
-      function wireIdentity(){
-        if (!window.netlifyIdentity){
-          return false;
-        }
-        // Init events
+
+      function bindIdentityEvents(){
+        if (!window.netlifyIdentity) return false;
+        if (initDone) return true;
+        initDone = true;
+
         window.netlifyIdentity.on('init', user => {
-          if (user){
-            hideLogin();
-          } else {
-            showLogin();
-          }
+          user ? showCMS() : showLogin();
         });
         window.netlifyIdentity.on('login', () => {
-          hideLogin();
-          window.netlifyIdentity.close();
-          // Let Decap mount then reveal
-          setTimeout(() => {
-            document.body.classList.add('authenticated');
-            const root = document.getElementById('nc-root');
-            if (root){ root.style.visibility = 'visible'; }
-          }, 600);
+          showCMS();
+          try { window.netlifyIdentity.close(); } catch(e){}
         });
         window.netlifyIdentity.on('logout', () => {
           showLogin();
         });
-        // Button
-        if (loginButton){
-          loginButton.addEventListener('click', () => {
-            try {
-              window.netlifyIdentity.open();
-            } catch(e){
-              console.error('[Identity] open failed', e);
-            }
-          });
-          loginButton.addEventListener('mouseenter', () => loginButton.style.background = '#006666');
-          loginButton.addEventListener('mouseleave', () => loginButton.style.background = '#008080');
-        }
         return true;
       }
-      // Immediate attempt
-      if (!wireIdentity()){
-        showLogin();
-        const timer = setInterval(() => {
-          attempts++;
-          if (wireIdentity() || attempts >= MAX_ATTEMPTS){
-            clearInterval(timer);
-            if (attempts >= MAX_ATTEMPTS){
-              console.warn('[Identity] Unable to initialize after attempts. Login fallback shown.');
-            }
+
+      function attemptInit(){
+        if (bindIdentityEvents()) return true;
+        if (Date.now() - start > MAX_INIT_WAIT_MS){
+          console.warn('[Identity] init timeout; showing login fallback');
+          showLogin();
+          return true; // stop retries
+        }
+        return false;
+      }
+
+      // Retry loop until identity widget available or timeout
+      if (!attemptInit()){
+        const retry = setInterval(() => {
+          if (attemptInit()) clearInterval(retry);
+        }, RETRY_INTERVAL_MS);
+      }
+
+      // Button behavior with double-attempt (some browsers swallow first open)
+      if (loginButton){
+        loginButton.addEventListener('click', () => {
+          console.log('[Identity] Sign in clicked');
+          if (!window.netlifyIdentity){
+            console.error('[Identity] Widget not loaded yet');
+            return showLogin();
           }
-        }, 500);
+          try {
+            window.netlifyIdentity.open();
+            // second open for reliability after short delay
+            setTimeout(() => {
+              if (window.netlifyIdentity && !window.netlifyIdentity.currentUser()){
+                window.netlifyIdentity.open();
+              }
+            }, 300);
+          } catch(e){
+            console.error('[Identity] open error', e);
+          }
+        });
+        loginButton.addEventListener('mouseenter', () => loginButton.style.background = '#006666');
+        loginButton.addEventListener('mouseleave', () => loginButton.style.background = '#008080');
       }
-      // Safety: reveal CMS if already authenticated but class not applied
+
+      // If already authenticated early (cached user) force reveal
       setTimeout(() => {
-        if (window.netlifyIdentity && window.netlifyIdentity.currentUser()){ hideLogin(); }
-      }, 3000);
+        if (window.netlifyIdentity && window.netlifyIdentity.currentUser()){
+          showCMS();
+        }
+      }, 2000);
     })();
-    // Decap may mount late; ensure root visibility after a grace period if authenticated
-    setTimeout(() => {
-      if (document.body.classList.contains('authenticated')){
-        const root = document.getElementById('nc-root');
-        if (root){ root.style.visibility = 'visible'; }
-      }
-    }, 2500);
   </script>
 </body>
 </html>
