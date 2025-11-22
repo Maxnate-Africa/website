@@ -15,84 +15,94 @@
       --accent-color: #008080 !important;
     }
     
-    /* SOFT hide default Decap login (allow internal lifecycle) */
-    body:not(.authenticated) [class*="LoginPage"],
-    body:not(.authenticated) [class*="AuthenticationPage"] {
-      opacity: 0 !important;
-      pointer-events: none !important;
-    }
-    
-    /* Hide CMS root until authenticated (keep element to avoid script errors) */
-    body:not(.authenticated) #nc-root {
-      visibility: hidden !important;
-    }
-    
-    /* Style the CMS logo */
+    /* Style the CMS logo to be prominent */
     img[src*="cms-01.png"],
-    img[src*="cms.png"],
     img[alt="Logo"],
-    header img {
-      max-width: 80px !important;
-      height: auto !important;
+    header img,
+    [class*="header"] img {
+      max-height: 50px !important;
+      height: 50px !important;
+      width: auto !important;
       display: block !important;
-      margin: 10px auto !important;
+      margin: 10px !important;
     }
     
-    /* Hide ALL Decap and Netlify branding */
-    a[href*="decapcms.org"],
+    /* Customize the login modal - Netlify Identity */
+    div[class*="netlify"] {
+      --accent-color: #008080;
+      --border-radius: 8px;
+    }
+    
+    /* Hide ALL Netlify branding */
     a[href*="netlify.com"],
-    img[alt*="Decap"],
     img[alt*="Netlify"],
-    [class*="LoginPage"] img,
-    div[class*="footer"]:has(a[href*="netlify"]),
-    div[class*="AppHeader-logo"],
-    [class*="AuthenticationPage"] [class*="AppHeader"] {
+    [class*="Provider"] img[alt="Netlify"],
+    div[class*="footer"]:has(a[href*="netlify"]) {
       display: none !important;
     }
     
-    /* Customize Netlify Identity widget */
-    .netlifyIdentity-modal,
-    div[class*="netlifyIdentity"] {
-      --accent-color: #008080 !important;
-    }
-    
-    /* Style all buttons with teal */
+    /* Style buttons with teal */
     button,
     .btn,
     [type="submit"],
     a[class*="btn"],
-    button[class*="button"],
-    .netlifyIdentity-button {
+    button[class*="button"] {
       background-color: #008080 !important;
       border-color: #008080 !important;
-      color: white !important;
     }
     
     button:hover,
     .btn:hover,
-    [type="submit"]:hover,
-    .netlifyIdentity-button:hover {
-      background-color: #006666 !important;
-      border-color: #006666 !important;
+    [type="submit"]:hover {
+      background-color: #020202 !important;
+      border-color: #020202 !important;
     }
     
-    /* Style Netlify Identity modal */
-    .netlifyIdentity-modal iframe {
-      border-radius: 8px !important;
+    /* Inject "Powered by Maxnate" into any modal footer */
+    div[class*="modal"] > div:last-child::after,
+    form::after {
+      content: "Powered by Maxnate" !important;
+      display: block !important;
+      text-align: center !important;
+      padding: 12px !important;
+      font-size: 12px !important;
+      color: #008080 !important;
+      font-weight: 500 !important;
+      margin-top: 10px !important;
+      border-top: 1px solid #e0e0e0 !important;
     }
+    /* Overlay & refined login card styles */
+    .login-overlay { display:none; position:fixed; inset:0; background:linear-gradient(135deg,#006666 0%,#008080 100%); z-index:9999; justify-content:center; align-items:center; padding:24px; animation:overlayFade .4s ease both; }
+    .login-card { background:#fff; padding:40px 36px 32px; width:100%; max-width:400px; border-radius:20px; box-shadow:0 12px 48px -8px rgba(0,0,0,.25); font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; display:flex; flex-direction:column; align-items:center; position:relative; transform:translateY(8px); animation:cardIn .5s cubic-bezier(.16,.8,.34,1) both; }
+    .login-logo { max-width:80px; height:auto; margin:0 0 20px; display:block; filter:drop-shadow(0 2px 4px rgba(0,0,0,.15)); }
+    .login-title { color:#008080; font-size:24px; font-weight:600; margin:0 0 8px; letter-spacing:.5px; }
+    .login-subtitle { color:#555; font-size:15px; margin:0 0 28px; line-height:1.4; text-align:center; }
+    .login-actions { width:100%; }
+    .login-button { width:100%; background:#008080; color:#fff; border:none; padding:14px 26px; font-size:16px; font-weight:500; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px; letter-spacing:.4px; transition:background .25s ease, transform .25s ease, box-shadow .25s ease; box-shadow:0 4px 16px -4px rgba(0,128,128,.4); }
+    .login-button:hover { background:#006d6d; box-shadow:0 6px 20px -6px rgba(0,128,128,.5); transform:translateY(-2px); }
+    .login-button:active { background:#005a5a; transform:translateY(0); }
+    .login-button:focus-visible { outline:3px solid #34d4d4; outline-offset:2px; }
+    .login-powered { font-size:12px; margin:34px 0 0; width:100%; text-align:center; padding-top:18px; color:#008080; font-weight:500; border-top:1px solid #e5e5e5; letter-spacing:.5px; }
+    @media (max-width:480px){ .login-card { padding:32px 24px 28px; border-radius:16px; } .login-title { font-size:22px; } .login-subtitle { font-size:14px; margin-bottom:24px; } .login-button { padding:12px 22px; font-size:15px; } }
+    @keyframes overlayFade { from { opacity:0; } to { opacity:1; } }
+    @keyframes cardIn { from { opacity:0; transform:translateY(24px) scale(.98); } to { opacity:1; transform:translateY(8px) scale(1); } }
+    .login-overlay[aria-hidden="false"] .login-card { transform:translateY(0); }
+    @media (prefers-reduced-motion:reduce){ .login-overlay, .login-card { animation:none; } .login-button { transition:none; } }
   </style>
 </head>
 <body>
   <!-- Custom login screen overlay -->
-  <div id="custom-login-screen" style="display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, #006666 0%, #008080 100%); z-index: 9999; justify-content: center; align-items: center; flex-direction: column;">
-    <div style="background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center; max-width: 400px; width: 90%;">
-      <img src="cms.png" alt="Maxnate Logo" style="max-width: 80px; height: auto; margin: 0 auto 20px; display: block;">
-      <h1 style="color: #008080; font-size: 24px; margin-bottom: 10px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">Welcome to Maxnate CMS</h1>
-      <p style="color: #666; margin-bottom: 30px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">Please login to manage your content</p>
-      <button id="login-button" style="background: #008080; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-size: 16px; cursor: pointer; font-weight: 500; width: 100%; transition: background 0.3s;">
-        Sign in
-      </button>
-      <p style="color: #008080; font-size: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; font-weight: 500;">Powered by Maxnate</p>
+  <div id="custom-login-screen" class="login-overlay" aria-hidden="true">
+    <div class="login-card" role="dialog" aria-modal="true" aria-labelledby="cms-login-title">
+      <img src="cms.png" alt="Maxnate Logo" class="login-logo" />
+      <h1 id="cms-login-title" class="login-title">Welcome to Maxnate CMS</h1>
+      <p class="login-subtitle">Please sign in to manage your content</p>
+      <div class="login-actions">
+        <button id="login-button" class="login-button" aria-label="Sign in with Netlify Identity">
+          <span class="login-button__text">Sign in</span>
+        </button>
+      </div>
+      <p class="login-powered">Powered by Maxnate</p>
     </div>
   </div>
   
@@ -101,93 +111,41 @@
   
   <!-- Netlify Identity redirect handling -->
   <script>
-    // Hardened Identity init with script detection & manual widget trigger
-    (function(){
+    // Wait for Netlify Identity to load
+    window.addEventListener('load', function() {
       const customLoginScreen = document.getElementById('custom-login-screen');
       const loginButton = document.getElementById('login-button');
-      const root = document.getElementById('nc-root');
-      const MAX_INIT_WAIT_MS = 8000;
-      const RETRY_INTERVAL_MS = 400;
-      let initDone = false;
-      let start = Date.now();
+      const showOverlay = () => { customLoginScreen.style.display = 'flex'; customLoginScreen.setAttribute('aria-hidden','false'); };
+      const hideOverlay = () => { customLoginScreen.style.display = 'none'; customLoginScreen.setAttribute('aria-hidden','true'); };
 
-      function showLogin(){
-        if (customLoginScreen) customLoginScreen.style.display = 'flex';
-        document.body.classList.remove('authenticated');
-        if (root) root.style.visibility = 'hidden';
-      }
-      function showCMS(){
-        if (customLoginScreen) customLoginScreen.style.display = 'none';
-        document.body.classList.add('authenticated');
-        if (root) root.style.visibility = 'visible';
-      }
-
-      function bindIdentityEvents(){
-        if (!window.netlifyIdentity) return false;
-        if (initDone) return true;
-        initDone = true;
-
+      if (window.netlifyIdentity) {
         window.netlifyIdentity.on('init', user => {
-          user ? showCMS() : showLogin();
+          if (!user) { showOverlay(); } else { hideOverlay(); }
         });
+
         window.netlifyIdentity.on('login', () => {
-          showCMS();
-          try { window.netlifyIdentity.close(); } catch(e){}
+          hideOverlay();
+          window.netlifyIdentity.close();
         });
+
         window.netlifyIdentity.on('logout', () => {
-          showLogin();
+          showOverlay();
         });
-        return true;
-      }
 
-      function attemptInit(){
-        if (bindIdentityEvents()) return true;
-        if (Date.now() - start > MAX_INIT_WAIT_MS){
-          console.warn('[Identity] init timeout; showing login fallback');
-          showLogin();
-          return true; // stop retries
+        if (loginButton) {
+          loginButton.addEventListener('click', () => {
+            if (window.netlifyIdentity) {
+              window.netlifyIdentity.open();
+            } else {
+              console.error('Netlify Identity not loaded');
+            }
+          });
         }
-        return false;
+      } else {
+        console.error('Netlify Identity widget not loaded');
+        showOverlay();
       }
-
-      // Retry loop until identity widget available or timeout
-      if (!attemptInit()){
-        const retry = setInterval(() => {
-          if (attemptInit()) clearInterval(retry);
-        }, RETRY_INTERVAL_MS);
-      }
-
-      // Button behavior with double-attempt (some browsers swallow first open)
-      if (loginButton){
-        loginButton.addEventListener('click', () => {
-          console.log('[Identity] Sign in clicked');
-          if (!window.netlifyIdentity){
-            console.error('[Identity] Widget not loaded yet');
-            return showLogin();
-          }
-          try {
-            window.netlifyIdentity.open();
-            // second open for reliability after short delay
-            setTimeout(() => {
-              if (window.netlifyIdentity && !window.netlifyIdentity.currentUser()){
-                window.netlifyIdentity.open();
-              }
-            }, 300);
-          } catch(e){
-            console.error('[Identity] open error', e);
-          }
-        });
-        loginButton.addEventListener('mouseenter', () => loginButton.style.background = '#006666');
-        loginButton.addEventListener('mouseleave', () => loginButton.style.background = '#008080');
-      }
-
-      // If already authenticated early (cached user) force reveal
-      setTimeout(() => {
-        if (window.netlifyIdentity && window.netlifyIdentity.currentUser()){
-          showCMS();
-        }
-      }, 2000);
-    })();
+    });
   </script>
 </body>
 </html>
