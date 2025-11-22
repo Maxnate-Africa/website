@@ -15,61 +15,71 @@
       --accent-color: #008080 !important;
     }
     
-    /* Style the CMS logo to be prominent */
-    img[src*="cms-01.png"],
-    img[alt="Logo"],
-    header img,
-    [class*="header"] img {
-      max-height: 50px !important;
-      height: 50px !important;
-      width: auto !important;
-      display: block !important;
-      margin: 10px !important;
-    }
-    
-    /* Customize the login modal - Netlify Identity */
-    div[class*="netlify"] {
-      --accent-color: #008080;
-      --border-radius: 8px;
-    }
-    
-    /* Hide ALL Netlify branding */
-    a[href*="netlify.com"],
-    img[alt*="Netlify"],
-    [class*="Provider"] img[alt="Netlify"],
-    div[class*="footer"]:has(a[href*="netlify"]) {
+    /* Hide default CMS login screen completely */
+    [class*="LoginPage"],
+    [class*="AuthenticationPage"],
+    div[class*="nc-login"],
+    #nc-root > div > div:first-child {
       display: none !important;
     }
     
-    /* Style buttons with teal */
+    /* Hide Decap CMS until authenticated */
+    body:not(.authenticated) #nc-root {
+      display: none !important;
+    }
+    
+    /* Style the CMS logo */
+    img[src*="cms-01.png"],
+    img[src*="cms.png"],
+    img[alt="Logo"],
+    header img {
+      max-width: 80px !important;
+      height: auto !important;
+      display: block !important;
+      margin: 10px auto !important;
+    }
+    
+    /* Hide ALL Decap and Netlify branding */
+    a[href*="decapcms.org"],
+    a[href*="netlify.com"],
+    img[alt*="Decap"],
+    img[alt*="Netlify"],
+    [class*="LoginPage"] img,
+    div[class*="footer"]:has(a[href*="netlify"]),
+    div[class*="AppHeader-logo"],
+    [class*="AuthenticationPage"] [class*="AppHeader"] {
+      display: none !important;
+    }
+    
+    /* Customize Netlify Identity widget */
+    .netlifyIdentity-modal,
+    div[class*="netlifyIdentity"] {
+      --accent-color: #008080 !important;
+    }
+    
+    /* Style all buttons with teal */
     button,
     .btn,
     [type="submit"],
     a[class*="btn"],
-    button[class*="button"] {
+    button[class*="button"],
+    .netlifyIdentity-button {
       background-color: #008080 !important;
       border-color: #008080 !important;
+      color: white !important;
     }
     
     button:hover,
     .btn:hover,
-    [type="submit"]:hover {
-      background-color: #020202 !important;
-      border-color: #020202 !important;
+    [type="submit"]:hover,
+    .netlifyIdentity-button:hover {
+      background-color: #006666 !important;
+      border-color: #006666 !important;
     }
     
-    /* Inject "Powered by Maxnate" into any modal footer */
-    div[class*="modal"] > div:last-child::after,
-    form::after {
-      content: "Powered by Maxnate" !important;
-      display: block !important;
-      text-align: center !important;
-      padding: 12px !important;
-      font-size: 12px !important;
-      color: #008080 !important;
-      font-weight: 500 !important;
-      margin-top: 10px !important;
-      border-top: 1px solid #e0e0e0 !important;
+    /* Style Netlify Identity modal */
+    .netlifyIdentity-modal iframe {
+      border-radius: 8px !important;
     }
   </style>
 </head>
@@ -103,19 +113,27 @@
           if (!user) {
             // User not logged in - show custom login screen
             customLoginScreen.style.display = 'flex';
+            document.body.classList.remove('authenticated');
           } else {
-            // User is logged in - hide custom screen
+            // User is logged in - hide custom screen and show CMS
             customLoginScreen.style.display = 'none';
+            document.body.classList.add('authenticated');
           }
         });
         
         window.netlifyIdentity.on("login", () => {
           customLoginScreen.style.display = 'none';
+          document.body.classList.add('authenticated');
           window.netlifyIdentity.close();
+          // Reload to show CMS
+          setTimeout(() => {
+            window.location.reload();
+          }, 500);
         });
         
         window.netlifyIdentity.on("logout", () => {
           customLoginScreen.style.display = 'flex';
+          document.body.classList.remove('authenticated');
         });
         
         // Handle login button click
